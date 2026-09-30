@@ -62,6 +62,9 @@
   .al-app--notes-off{grid-template-columns:252px minmax(0,1fr) 0}
   .al-app--rail-off.al-app--notes-off{grid-template-columns:0 minmax(0,1fr) 0}
   .al-rail{grid-column:1}.al-stage{grid-column:2}.al-notes{grid-column:3}
+  .al-fold{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1px solid var(--v-border-default);background:transparent;color:var(--v-text-tertiary);cursor:pointer}
+  .al-fold:hover{color:var(--v-text-primary);border-color:var(--v-border-strong)}
+  .al-brand .al-fold{margin-left:auto}
   .al-app--rail-off .al-rail,.al-app--notes-off .al-notes{display:none}
   .al-edge{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:18px;height:56px;border-radius:9px;border:1px solid var(--v-border-default);background:var(--v-bg-primary);color:var(--v-text-tertiary);display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity .2s,color .2s}
   .al-edge:hover{opacity:1;color:var(--v-text-primary)}
@@ -517,7 +520,7 @@
 <div class="al-app">
   <aside class="al-rail">
     <div class="al-rail-head">
-      <div class="al-brand"><span style="display:inline-flex;width:17px;height:21px;color:var(--v-text-primary)"><vb-v style="width:17px;height:21px"></vb-v></span><span class="al-brand-label">Vibers · 氛围派</span></div>
+      <div class="al-brand"><span style="display:inline-flex;width:17px;height:21px;color:var(--v-text-primary)"><vb-v style="width:17px;height:21px"></vb-v></span><span class="al-brand-label">Vibers · 氛围派</span><button type="button" class="al-fold" data-panel="rail" title="收起目录（[）" aria-label="收起目录"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg></button></div>
       <div class="al-rail-title">AI 辅助原型</div>
       <div class="al-rail-sub">主办方网页端 · 六组，每个介入点一页样机，右上角切状态。不确定的地方都能跳到 06 的 AI 对话</div>
     </div>
@@ -533,7 +536,7 @@
   </main>
 
   <aside class="al-notes">
-    <div class="al-notes-head"><span class="al-notes-title">设计说明</span><button type="button" class="al-theme" data-pf-theme-toggle aria-label="切换深浅色模式"><span style="width:6px;height:6px;border-radius:50%;background:var(--v-brand-signal)"></span>切换到 <span data-pf-theme-label>浅色</span></button></div>
+    <div class="al-notes-head"><span class="al-notes-title">设计说明</span><button type="button" class="al-theme" data-pf-theme-toggle aria-label="切换深浅色模式"><span style="width:6px;height:6px;border-radius:50%;background:var(--v-brand-signal)"></span>切换到 <span data-pf-theme-label>浅色</span></button><button type="button" class="al-fold" data-panel="notes" title="收起说明（]）" aria-label="收起说明"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></button></div>
     <div class="al-notes-body" id="alNotes"></div>
   </aside>
 </div>
