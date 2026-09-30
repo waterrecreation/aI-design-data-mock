@@ -1,0 +1,201 @@
+/* Vibers UI Design System — tokens
+   Ported from the "Vibers UI Design System v1.1" reference (vibers-ui.css) and
+   extended to match "Vibers UI Kit v1" (Icon System / Agent Motion / Tag System /
+   Core Components). Applied directly at :root — this repo IS the Vibers frontend,
+   so the original .v-ui embedding scope is dropped.
+   Theme is controlled with [data-v-theme="dark"|"light"] on <html>.
+   Brand principle: One Brand · One Orange (#ED6A2C).
+
+   Values below are re-derived to match 氛围派 Brand Kit v1.4 exactly: 5 Layer-0
+   tokens (Ink #141414 / Paper #F5F3EF / Mist #EDEAE4 / Stone #8E8B84 / Signal
+   #ED6A2C), everything else a documented mix of those five. Canvas dark = Ink
+   directly (no extra near-black step); light Surface and Elevated share the
+   same hex — the shadow alone does the elevation lift, never a brighter fill. */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Sora:wght@400;500;600&display=swap');
+
+:root {
+  /* Brand — Layer 0, the only 5 source colors in the system */
+  --v-brand-signal: #ED6A2C;
+  --v-brand-paper: #F5F3EF;
+  --v-brand-ink: #141414;
+  --v-brand-stone: #8E8B84;
+  --v-brand-mist: #EDEAE4;
+  --v-color-on-signal: #141414; /* Ink 100% — text on any Signal fill, always, never white */
+
+  /* Typography */
+  --v-font-cjk: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --v-font-latin: "Sora", Inter, ui-sans-serif, system-ui, sans-serif;
+  --v-font-mixed: "Sora", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --v-text-display: 32px;
+  --v-text-h1: 28px;
+  --v-text-h2: 22px;
+  --v-text-h3: 18px;
+  --v-text-body-lg: 16px;
+  --v-text-body: 15px;
+  --v-text-label: 14px;
+  --v-text-caption: 13px;
+  --v-text-meta: 12px;
+
+  --v-line-display: 40px;
+  --v-line-h1: 36px;
+  --v-line-h2: 30px;
+  --v-line-h3: 26px;
+  --v-line-body-lg: 26px;
+  --v-line-body: 24px;
+  --v-line-label: 20px;
+  --v-line-caption: 20px;
+  --v-line-meta: 18px;
+
+  /* 4pt spacing */
+  --v-space-1: 4px;
+  --v-space-2: 8px;
+  --v-space-3: 12px;
+  --v-space-4: 16px;
+  --v-space-5: 20px;
+  --v-space-6: 24px;
+  --v-space-8: 32px;
+  --v-space-10: 40px;
+  --v-space-12: 48px;
+
+  /* Radius */
+  --v-radius-sm: 10px;
+  --v-radius-md: 14px;
+  --v-radius-lg: 18px;
+  --v-radius-xl: 24px;
+  --v-radius-sheet: 28px;
+  --v-radius-pill: 999px;
+
+  /* Motion */
+  --v-motion-press: 140ms;
+  --v-motion-state: 200ms;
+  --v-motion-sheet: 300ms;
+  --v-motion-page: 320ms;
+  --v-motion-ambient: 14s;
+  --v-ease-standard: cubic-bezier(.2,.8,.2,1);
+
+  /* Intensity ramp — Signal-over-surface only, not a 4th hue. Used by the
+     relationship-strength bar, "此刻" freshness dot decay, capacity line. */
+  --v-sig-1: color-mix(in srgb, var(--v-brand-signal) 32%, transparent);
+  --v-sig-2: color-mix(in srgb, var(--v-brand-signal) 62%, transparent);
+  --v-sig-3: var(--v-brand-signal);
+
+  /* Status (the one place non-brand color is allowed — status only, never decoration).
+     Pending stays Signal itself (Signal marks "something in the world is
+     happening", not an outcome) — no second, lighter orange variant. */
+  --v-status-pending-bg: rgba(237,106,44,.12);
+  --v-status-pending-dot: #ED6A2C;
+  --v-status-approved-bg: rgba(107,157,122,.14);
+  --v-status-rejected-bg: rgba(200,74,58,.14);
+  --v-status-rejected-dot: #C84A3A;
+  --v-status-live-border: rgba(237,106,44,.4);
+  --v-status-live-text: #ED6A2C;
+
+  /* Semantic defaults (dark fallback, used before JS/attribute resolves) */
+  --v-bg-primary: #141414;
+  --v-bg-surface: #191918;
+  --v-bg-elevated: #1F1F1E;
+  --v-bg-secondary: #191918;
+  --v-text-primary: #F5F3EF;
+  --v-text-secondary: rgba(245,243,239,.70);
+  --v-text-tertiary: rgba(245,243,239,.54);
+  --v-text-disabled: rgba(245,243,239,.34);
+  --v-signal-text: #ED6A2C;
+  --v-signal-display: #ED6A2C;
+  --v-border-default: rgba(245,243,239,.12);
+  --v-border-subtle: rgba(245,243,239,.08);
+  --v-border-strong: rgba(245,243,239,.20);
+  --v-tint-neutral: rgba(142,139,132,.14);
+  --v-ambient-color: #ED6A2C;
+  --v-ambient-core: rgba(237,106,44,.40);
+  --v-ambient-mid: rgba(237,106,44,.12);
+  --v-ambient-edge: rgba(237,106,44,.02);
+  --v-neutral-action-bg: #F5F3EF;
+  --v-neutral-action-fg: #141414;
+  --v-shadow-soft: none;
+}
+
+:root[data-v-theme="dark"] {
+  color-scheme: dark;
+  --v-bg-primary: #141414;      /* Ink 100% */
+  --v-bg-surface: #191918;      /* Stone 4% / Ink */
+  --v-bg-elevated: #1F1F1E;     /* Stone 9% / Ink */
+  --v-bg-secondary: #191918;
+  --v-text-primary: #F5F3EF;    /* Paper 100% */
+  --v-text-secondary: rgba(245,243,239,.70);  /* Paper 70% / Ink */
+  --v-text-tertiary: rgba(245,243,239,.54);   /* Paper 54% / Ink */
+  --v-text-disabled: rgba(245,243,239,.34);   /* Paper 34% / Ink */
+  --v-signal-text: #ED6A2C;     /* Signal 100% — compliant on Ink at any size */
+  --v-signal-display: #ED6A2C;  /* no positional shift needed in dark */
+  --v-border-default: rgba(245,243,239,.12);
+  --v-border-subtle: rgba(245,243,239,.08);
+  --v-border-strong: rgba(245,243,239,.20);
+  --v-tint-neutral: rgba(142,139,132,.14);
+  --v-ambient-color: #ED6A2C;
+  --v-ambient-core: rgba(237,106,44,.40);
+  --v-ambient-mid: rgba(237,106,44,.12);
+  --v-ambient-edge: rgba(237,106,44,.02);
+  --v-neutral-action-bg: #F5F3EF;
+  --v-neutral-action-fg: #141414;
+  --v-shadow-soft: none; /* dark never casts shadow — elevation is brightness + border-strong only */
+
+  --v-status-pending-text: #ED6A2C;
+  --v-status-approved-text: #8FBF9F;
+  --v-status-approved-dot: #6B9D7A;
+  --v-status-rejected-text: #E8887B;
+  --v-status-neutral-bg: rgba(245,243,239,.08);
+  --v-status-neutral-text: rgba(245,243,239,.72);
+  --v-status-ended-border: rgba(245,243,239,.14);
+  --v-status-ended-text: rgba(245,243,239,.5);
+}
+
+:root[data-v-theme="light"] {
+  color-scheme: light;
+  --v-bg-primary: #EDEAE4;      /* Mist 100% */
+  --v-bg-surface: #F5F3EF;      /* Paper 100% */
+  --v-bg-elevated: #F5F3EF;     /* same as Surface — lift comes from --v-shadow-soft only, never a brighter fill */
+  --v-bg-secondary: #EDEAE4;
+  --v-text-primary: #141414;    /* Ink 100% */
+  --v-text-secondary: rgba(20,20,20,.72);   /* Ink 72% / Paper */
+  --v-text-tertiary: rgba(20,20,20,.62);    /* Ink 62% / Paper */
+  --v-text-disabled: #8E8B84;               /* Stone 100% — disabled-only in light, never body text */
+  --v-signal-text: #A84E24;     /* Signal 68% / Ink — the only compliant orange TEXT color in light (4.5:1+) */
+  --v-signal-display: #E0652B;  /* Signal 94% / Ink, 3.12:1 — ONLY for ≥24px/weight-500 on Paper */
+  --v-border-default: rgba(20,20,20,.12);
+  --v-border-subtle: rgba(20,20,20,.08);
+  --v-border-strong: rgba(20,20,20,.20);
+  --v-tint-neutral: rgba(142,139,132,.14);
+  --v-ambient-color: #ED6A2C;
+  --v-ambient-core: rgba(237,106,44,.28);
+  --v-ambient-mid: rgba(237,106,44,.09);
+  --v-ambient-edge: rgba(237,106,44,.02);
+  --v-neutral-action-bg: #141414;
+  --v-neutral-action-fg: #F5F3EF;
+  --v-shadow-soft: 0 1px 2px rgba(20,20,20,.06), 0 12px 32px -8px rgba(20,20,20,.16);
+
+  --v-status-pending-text: #A84E24;
+  --v-status-approved-text: #4A7A5C;
+  --v-status-approved-dot: #4A7A5C;
+  --v-status-rejected-text: #C0453A;
+  --v-status-neutral-bg: rgba(20,20,20,.08);
+  --v-status-neutral-text: rgba(20,20,20,.72);
+  --v-status-ended-border: rgba(20,20,20,.14);
+  --v-status-ended-text: rgba(20,20,20,.5);
+}
+
+/* Layer 2b — brand tier (landing/poster surfaces): Canvas is a full-bleed
+   sheet of Paper/Ink, not a stack of elevated surfaces, so it does not step
+   up from Mist the way product-tier Canvas does. Ambient glow is also not
+   capped at the product tier's ~15% screen-area ceiling on this tier. */
+:root[data-v-tier="brand"][data-v-theme="light"] { --v-bg-primary: var(--v-brand-paper); }
+:root[data-v-tier="brand"][data-v-theme="dark"]  { --v-bg-primary: var(--v-brand-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+}
