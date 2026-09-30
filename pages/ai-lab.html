@@ -57,6 +57,18 @@
   .al-kbd-hint{position:absolute;right:28px;bottom:14px;font:400 11px/16px Sora,'Noto Sans SC',sans-serif;color:var(--v-text-tertiary);pointer-events:none}
   .al-kbd{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:5px;border:1px solid var(--v-border-subtle);font:500 10px/1 Sora,sans-serif;margin:0 2px}
 
+  /* 左右两栏可折叠：样机贴在中间看正式页面效果。把手贴在样机区左右边缘，收起后还留着，点了再展开；[ ] 两个键也能切 */
+  .al-app--rail-off{grid-template-columns:0 minmax(0,1fr) 336px}
+  .al-app--notes-off{grid-template-columns:252px minmax(0,1fr) 0}
+  .al-app--rail-off.al-app--notes-off{grid-template-columns:0 minmax(0,1fr) 0}
+  .al-rail{grid-column:1}.al-stage{grid-column:2}.al-notes{grid-column:3}
+  .al-app--rail-off .al-rail,.al-app--notes-off .al-notes{display:none}
+  .al-edge{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:18px;height:56px;border-radius:9px;border:1px solid var(--v-border-default);background:var(--v-bg-primary);color:var(--v-text-tertiary);display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity .2s,color .2s}
+  .al-edge:hover{opacity:1;color:var(--v-text-primary)}
+  .al-edge--l{left:8px}.al-edge--r{right:8px}
+  .al-edge svg{transition:transform .2s}
+  .al-app--rail-off .al-edge--l svg,.al-app--notes-off .al-edge--r svg{transform:rotate(180deg)}
+
   .al-notes{display:flex;flex-direction:column;border-left:1px solid var(--v-border-subtle);min-height:0}
   .al-notes-head{flex:none;display:flex;align-items:center;gap:10px;padding:18px 22px 14px;border-bottom:1px solid var(--v-border-subtle)}
   .al-notes-title{font:500 13px/18px Sora,'Noto Sans SC',sans-serif;color:var(--v-text-primary)}
@@ -514,9 +526,11 @@
   </aside>
 
   <main class="al-stage">
+    <button type="button" class="al-edge al-edge--l" data-panel="rail" title="收起 / 展开目录（[）" aria-label="收起或展开目录"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg></button>
+    <button type="button" class="al-edge al-edge--r" data-panel="notes" title="收起 / 展开说明（]）" aria-label="收起或展开说明"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></button>
     <div class="al-stage-head" id="alHead"></div>
     <div class="al-stage-body" id="alBody"></div>
-    <div class="al-kbd-hint"><span class="al-kbd">←</span><span class="al-kbd">→</span> 切状态 · <span class="al-kbd">↑</span><span class="al-kbd">↓</span> 切场景</div>
+    <div class="al-kbd-hint"><span class="al-kbd">←</span><span class="al-kbd">→</span> 切状态 · <span class="al-kbd">↑</span><span class="al-kbd">↓</span> 切场景 · <span class="al-kbd">[</span><span class="al-kbd">]</span> 收起两侧</div>
   </main>
 
   <aside class="al-notes">
@@ -676,7 +690,32 @@
     else if (e.key === 'ArrowUp') { go(all[(idx - 1 + all.length) % all.length].id, 0); e.preventDefault(); }
   });
   window.addEventListener('hashchange', function () { readHash(); render(); });
-  window.addEventListener('DOMContentLoaded', function () { readHash(); render(); });
+
+  // 左右两栏折叠：记在 localStorage，下次打开保持
+  var PANEL_KEY = { rail: 'al-rail-off', notes: 'al-notes-off' };
+  function applyPanels() {
+    var app = document.querySelector('.al-app');
+    Object.keys(PANEL_KEY).forEach(function (p) {
+      var off = false;
+      try { off = localStorage.getItem(PANEL_KEY[p]) === '1'; } catch (e) { /* 存不上就只影响本次 */ }
+      app.classList.toggle('al-app--' + p + '-off', off);
+    });
+  }
+  function togglePanel(p) {
+    var app = document.querySelector('.al-app');
+    var off = !app.classList.contains('al-app--' + p + '-off');
+    try { localStorage.setItem(PANEL_KEY[p], off ? '1' : '0'); } catch (e) { /* ignore */ }
+    app.classList.toggle('al-app--' + p + '-off', off);
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-panel]'); if (b) togglePanel(b.getAttribute('data-panel'));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '[') { togglePanel('rail'); e.preventDefault(); }
+    else if (e.key === ']') { togglePanel('notes'); e.preventDefault(); }
+  });
+  window.addEventListener('DOMContentLoaded', function () { applyPanels(); readHash(); render(); });
 })();
 </script>
 <script src="../assets/js/ai-lab/scenes-create.js"></script>
