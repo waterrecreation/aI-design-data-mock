@@ -75,6 +75,8 @@
     '.dx-ai-empty{display:flex;align-items:center;gap:12px}' +
     '.dx-btn{display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid var(--v-border-strong);background:none;color:var(--v-text-primary);font:500 12.5px/1 var(--v-font-mixed);cursor:pointer}' +
     '.dx-method{padding-top:16px;border-top:1px solid var(--v-border-subtle);font:400 13px/20px var(--v-font-mixed);color:var(--v-text-tertiary)}' +
+    '.dx-chips{display:flex;flex-wrap:wrap;gap:8px}.dx-chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 11px;border-radius:10px;border:1px solid var(--v-border-default);font:400 13px/20px var(--v-font-mixed);color:var(--v-text-primary)}.dx-chip b{font-weight:400;font-variant-numeric:tabular-nums;color:var(--v-text-tertiary)}' +
+    '.dx-aud{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}.dx-aud-col{display:flex;flex-direction:column;gap:10px;min-width:0}.dx-aud-l{font:400 12px/18px var(--v-font-mixed);color:var(--v-text-tertiary)}.dx-aud .dx-hb li{grid-template-columns:96px minmax(0,1fr) 72px}' +
     '.dx-ws{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.dx-ws-t{font:500 22px/30px var(--v-font-mixed);letter-spacing:-.01em;color:var(--v-text-primary)}.dx-ws-s{margin-top:2px;font:400 12px/18px var(--v-font-mixed);color:var(--v-text-tertiary)}';
   var style = document.createElement('style');
   style.textContent = css;
@@ -179,6 +181,16 @@
       : line('只看活动设置和汇总数，不看任何人', true);
     return block('AI 分析', done ? 'AI 生成，可能有误 · 10 月 1 日' : (withLinks ? '根据这场的设置和数据，给下一场的建议' : '根据这段时间的数据，给接下来的建议'), body, h.aiBtn(done ? '重新生成' : '生成分析'));
   }
+  /* 来的人：按名片归类（职业 / 标签 / 城市），只有类别和人数。快照同 mock 的 audience 字段 */
+  var HOST_AUD = { people: 151, titles: [['学生', 22], ['创业者', 21], ['市场', 20], ['投资人', 19], ['运营', 19], ['产品经理', 17], ['设计师', 17], ['工程师', 16]], tags: [['游戏', 22], ['摄影', 21], ['品牌', 20], ['写作', 20], ['创业', 19], ['产品设计', 19], ['设计系统', 18], ['数据', 17], ['社区运营', 16], ['开源', 16], ['硬件', 15], ['AI', 15]], cities: [['上海', 33], ['杭州', 30], ['深圳', 30], ['苏州', 30], ['北京', 28]] };
+  var A19_AUD = { people: 24, titles: [['创业者', 4], ['学生', 4], ['运营', 3], ['投资人', 3], ['市场', 3], ['产品经理', 3], ['工程师', 2], ['设计师', 2]], tags: [['游戏', 7], ['内容创作', 4], ['开源', 4], ['产品设计', 4], ['创业', 4], ['AI', 4], ['社区运营', 4], ['数据', 3], ['教育', 3], ['硬件', 3], ['前端', 2]], cities: [['深圳', 5], ['苏州', 5], ['上海', 5], ['杭州', 5], ['北京', 4]] };
+  var A3_AUD = { people: 58, titles: [['产品经理', 9], ['工程师', 8], ['创业者', 8], ['设计师', 7], ['运营', 7], ['学生', 7], ['投资人', 6], ['市场', 6]], tags: [['创业', 14], ['AI', 12], ['产品设计', 10], ['投资', 9], ['独立开发', 8], ['数据', 7], ['开源', 6], ['硬件', 5], ['社区运营', 5], ['内容创作', 4], ['前端', 3], ['写作', 3]], cities: [['上海', 31], ['杭州', 11], ['深圳', 8], ['北京', 5], ['苏州', 3]] };
+  function audience(a, pctCities) {
+    var cities = a.cities.map(function (c) { return c[0] + ' ' + (pctCities ? pct(c[1], a.people) + '%' : c[1]); }).join(' / ');
+    var body = '<div class="dx-aud"><div class="dx-aud-col"><span class="dx-aud-l">职业</span>' + hbars(a.titles.map(function (t) { return { l: t[0], v: t[1], t: t[1] + ' 人' }; })) + '</div>' +
+      '<div class="dx-aud-col"><span class="dx-aud-l">标签</span><div class="dx-chips">' + a.tags.map(function (t) { return '<span class="dx-chip">' + t[0] + '<b>' + t[1] + ' 人</b></span>'; }).join('') + '</div></div></div>';
+    return { meta: a.people + ' 人有名片信息 · ' + cities, body: body };
+  }
   var HOST_AI = [
     ['16–40 人的场每 10 个到场者互相关注 6.8 对，15 人以内 2.3 对。想让人认识，人数上限按 30 左右设。'],
     ['第一次来的人里 90 天内又来的只有 33%。每场结束后一周内把下一场发出来，新人还记得你的时候最容易再来。'],
@@ -219,6 +231,7 @@
       '<div class="dx-hl">' + hl.map(function (s) { return line(s); }).join('') + '</div>' +
       tiles([tile('活动', t.ended, '场', '上个 90 天 ' + p.ended + ' 场'), tile('到场', t.people, '人', '上个 90 天 ' + p.people + ' 人'), tile('回头客', (100 - pct(c.tier_1, c.people)) + '%', '', '上个 90 天 ' + (100 - pct(c.prev.tier_1, c.prev.people)) + '%'), tile('评分', avgRating.toFixed(1), '', '上个 90 天 ' + (p.rating_sum / p.rated_count).toFixed(1))]) +
       block('到场', '按场', cols(HOST.events.slice().reverse().map(function (e) { return { d: e.d, back: e.att - e.first, first: e.first }; }))) +
+      (function () { var au = audience(HOST_AUD, true); return block('来的人', au.meta, au.body); })() +
       block('人和人', '只算对数，不看是谁', tiles([tile('第一次同场', fmt(k.new_pairs), '对', '上个 90 天 ' + fmt(k.prev.new_pairs) + ' 对'), tile('活动后互相关注', k.followed_pairs, '对', k.pending_events + ' 场还没满 7 天 · 上个 90 天 ' + k.prev.followed_pairs + ' 对'), tile('再次见面', k.repeat_pairs, '对', '上个 90 天 ' + k.prev.repeat_pairs + ' 对')], true)) +
       block('哪种场更好', '', cmp, select('按人数')) +
       block('评价', '平均 ' + avgRating.toFixed(1) + ' · ' + t.rated_count + ' 人打分 · ' + pct(t.again_true, t.again_true + t.again_false) + '% 会再来', hbars(tagRows), '<span class="dx-bm">竖线是平台均值</span>') +
@@ -251,7 +264,7 @@
       '<p class="dx-stamp" style="margin-top:0">已结束</p>' +
       tiles([tile('报名成功', f.approved, '人', '报名 ' + f.all + ' 人'), tile('到场', f.attended, '人', '到场率 ' + rate + '%'), tile('活动后互相关注', k.followed_pairs, '对', fmt(k.new_pairs) + ' 对第一次同场'), tile('评分', rt, '', fb.count + ' 条反馈')]) +
       block('从报名到到场', '', funnel) +
-      block('来的是谁', '到场 ' + c.people + ' 人', stack([['第一次来', c.first, 3], ['来过 1–2 场', c.some, 2], ['来过 3 场以上', c.regular, 1]]) + '<div class="dx-sub"><div class="dx-sub-t">彼此之间</div>' + stack([['见过', pairs - unknown, 1], ['没见过', unknown, 3]]) + '</div>') +
+      block('来的是谁', '到场 ' + c.people + ' 人', stack([['第一次来', c.first, 3], ['来过 1–2 场', c.some, 2], ['来过 3 场以上', c.regular, 1]]) + '<div class="dx-sub"><div class="dx-sub-t">彼此之间</div>' + stack([['见过', pairs - unknown, 1], ['没见过', unknown, 3]]) + '</div>' + (function () { var au = audience(A19_AUD); return '<div class="dx-sub"><div class="dx-sub-t">' + au.meta + '</div>' + au.body + '</div>'; })()) +
       block('评价', '平均 ' + rt + ' · ' + fb.checked + ' 人签到，' + fb.count + ' 人写了 · ' + again + '% 会再来', hbars(tagRows), '<span class="dx-bm">竖线是平台均值</span>') +
       block('和你平时比', '你平时 = 近一年其他 ' + b.events + ' 场', cmp) +
       aiBlock(h, A19.ai, aiDone, true) + '</div>';
@@ -266,7 +279,7 @@
       '<p class="dx-stamp" style="margin-top:0">开始前</p>' +
       block('报名', '已开放 ' + p.days_open + ' 天 · 截止还有 ' + p.days_left + ' 天 · 最近 7 天 +' + p.new_7d, lineChart(A3.daily, A3.marks, '9/10', '10/1') +
         tiles([tile('报名成功', p.registered, '人', ''), tile('剩余名额', p.remaining, '', '上限 ' + p.capacity), tile('待审核', p.pending, '人', p.pending_over + ' 人超过 1 天 · <span class="dx-link">去审核</span>')], true)) +
-      block('谁来了', '报名成功 ' + c.people + ' 人', stack([['第一次来', c.first, 3], ['来过 1–2 场', c.some, 2], ['来过 3 场以上', c.regular, 1]]) + '<div class="dx-sub"><div class="dx-sub-t">彼此之间</div>' + stack([['见过', pairs - unknown, 1], ['没见过', unknown, 3]]) + '</div>') +
+      block('谁来了', '报名成功 ' + c.people + ' 人', stack([['第一次来', c.first, 3], ['来过 1–2 场', c.some, 2], ['来过 3 场以上', c.regular, 1]]) + '<div class="dx-sub"><div class="dx-sub-t">彼此之间</div>' + stack([['见过', pairs - unknown, 1], ['没见过', unknown, 3]]) + '</div>' + (function () { var au = audience(A3_AUD); return '<div class="dx-sub"><div class="dx-sub-t">' + au.meta + '</div>' + au.body + '</div>'; })()) +
       block('报名回答', '报名的人', A3.questions.map(function (q) {
         if (q.text) return line('「' + q.title + '」' + q.filled + ' 人填了，在名单里看', true);
         return '<div class="dx-q"><div class="dx-q-t">' + q.title + '<span class="dx-q-m">' + q.answered + ' 人答了</span></div>' + hbars(q.options.map(function (o) { return { l: o[0], v: o[1], t: o[1] + ' 人 · ' + pct(o[1], q.answered) + '%' }; }), { cls: 'dx-hb--q' }) + '</div>';
