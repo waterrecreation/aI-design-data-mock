@@ -1,4 +1,4 @@
-/* AI 辅助原型 · 04 活动中（C01–C02）· 05 活动后 · 反馈与数据（D01–D03）· 06 AI 对话（X00–X02）· 全部网页端 */
+/* AI 辅助原型 · 04 活动中（C01–C02）· 05 活动后 · 反馈与数据（D01–D02）· 06 AI 对话（X00–X02）· 全部网页端 */
 (function () {
   'use strict';
   var R = window.AILab.register;
@@ -15,15 +15,15 @@
     var convs = o.convs || [['这场 · 创业者夜聊 Vol.7', [['起名 · 定主题', o.on === 'name'], ['看数据', o.on === 'data'], ['推荐嘉宾和场地', o.on === 'guest'], ['写通知', false]]], ['其他活动', [['AI & Society 第 4 期 · 详情', false], ['慢读会 · 品牌介绍', o.on === 'brand']]]];
     var side = '<aside class="al-cp-side"><div class="al-cp-brand"><span style="display:inline-flex;width:14px;height:17px;color:var(--v-text-primary)"><vb-v style="width:14px;height:17px"></vb-v></span>活动 AI</div><button type="button" class="al-cp-new">+ 新对话</button>' +
       convs.map(function (g) { return '<div class="al-cp-group">' + g[0] + '</div>' + g[1].map(function (c) { return '<button type="button" class="al-cp-item' + (c[1] ? ' al-cp-item--on' : '') + '">' + c[0] + '</button>'; }).join(''); }).join('') + '</aside>';
-    var head = '<div class="al-cp-head"><span class="al-cp-about">' + h.ICON.cal.replace('width="16" height="16"', 'width="13" height="13"') + h.esc(o.about || '创业者夜聊 Vol.7 · 草稿') + '</span><span class="al-cp-from">' + h.esc(o.from || '') + '</span><button type="button" class="al-btn al-btn--sm" style="margin-left:auto">' + h.esc(o.back || '返回工作台') + '</button></div>';
-    var foot = '<div class="al-cp-foot"><div class="al-chat-input">' + h.esc(o.placeholder || '问这场活动的任何事，或直接说要做什么') + '<button type="button" class="send">发送</button></div><div style="margin-top:8px;font-size:11.5px;color:var(--v-text-tertiary)">只回答和这场活动、你的主办方有关的事 · 产出要你点「回填」才写进表单</div></div>';
+    var head = '<div class="al-cp-head"><span class="al-cp-about">' + h.ICON.cal.replace('width="16" height="16"', 'width="13" height="13"') + h.esc(o.about || '创业者夜聊 Vol.7 · 草稿') + '</span><span class="al-cp-from">' + h.esc(o.from || '') + '</span><button type="button" class="al-btn al-btn--sm" data-go="' + (o.on === 'brand' ? 'A00' : o.on === 'data' ? 'D02' : 'A01') + '" style="margin-left:auto">' + h.esc(o.back || '返回工作台') + '</button></div>';
+    var foot = '<div class="al-cp-foot"><div class="al-chat-input">' + h.esc(o.placeholder || '问这场活动的任何事，或直接说要做什么') + '<button type="button" class="al-btn al-btn--sm" data-go="X01" data-go-state="5">语音</button><button type="button" class="al-btn al-btn--sm" data-go="X01" data-go-state="6">上传海报</button><button type="button" class="send">发送</button></div><div style="margin-top:8px;font-size:11.5px;color:var(--v-text-tertiary)">生成的内容会先展示给你，确认后才用于活动信息。</div></div>';
     var ctx = '<aside class="al-cp-ctx">' + (o.ctx || '') + '</aside>';
     return '<div class="al-chatpage">' + side + '<main class="al-cp-main">' + head + '<div class="al-cp-body">' + (o.body || '') + '</div>' + foot + '</main>' + ctx + '</div>';
   }
   function aiSay(h, html, sub) { return '<div class="al-ask" style="margin-top:0"><span class="al-ask-icon">' + h.SPARK + '</span><div class="al-ask-bubble">' + html + (sub ? '<div class="al-ask-sub">' + sub + '</div>' : '') + '</div></div>'; }
   function userSay(html) { return '<div class="al-user-bubble" style="margin-top:0">' + html + '</div>'; }
   function known(h, items) { return '<div class="al-chat-known">' + h.SPARK + ' <b>已经知道的</b><div style="margin-top:6px">' + items.map(function (i) { return '<div style="margin-top:4px">' + i[0] + '<span class="src">' + i[1] + '</span></div>'; }).join('') + '</div></div>'; }
-  function outPanel(h, items, foot) { return '<div class="al-out"><div class="al-out-h">会回填到</div>' + items.map(function (i) { return '<div class="al-out-item"><div class="al-out-k">' + i[0] + '</div><div class="al-out-v' + (i[2] ? ' al-out-v--empty' : '') + '">' + i[1] + '</div></div>'; }).join('') + '<div class="al-out-foot">' + (foot || '') + '</div></div>'; }
+  function outPanel(h, items, foot) { return '<div class="al-out"><div class="al-out-h">' + (items[0] && items[0][0] === '导出' ? '数据结果' : items.some(function (i) { return !i[2]; }) ? '请确认以下信息' : '还需要了解的信息') + '</div>' + items.map(function (i) { return '<div class="al-out-item"><div class="al-out-k">' + i[0] + '</div><div class="al-out-v' + (i[2] ? ' al-out-v--empty' : '') + '">' + i[1] + '</div></div>'; }).join('') + '<div class="al-out-foot">' + (foot || '') + '</div></div>'; }
 
   // ========== 04 活动中 ==========
   R({
@@ -88,14 +88,14 @@
     return items.map(function (f) { return '<div style="display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--v-border-subtle)"><span class="jd-person-av">' + (f[0] === '匿名' ? '·' : f[0].charAt(0)) + '</span><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px"><span class="jd-person-name">' + f[0] + '</span><span class="fr-mini-badge" style="' + (f[1] === '已参与' ? 'background:var(--v-status-approved-bg);color:var(--v-status-approved-text)' : '') + '">' + f[1] + '</span><span style="margin-left:auto;font-size:12px;color:var(--v-text-tertiary)">' + f[2] + '</span></div><div class="fr-answer" style="font-size:14px;line-height:23px;margin-top:5px">' + f[3] + '</div></div></div>'; }).join('');
   }
   R({
-    id: 'D01', stage: 'after', title: '反馈汇总', where: 'pub-c-editor · 「反馈」tab 顶部', surface: 'web', flag: 'P0',
+    id: 'D01', stage: 'after', title: '反馈汇总', where: 'pub-c-editor · 「反馈」tab 顶部', surface: 'web', flag: 'P1',
     states: ['少于 5 条', '汇总块'],
     stateNotes: ['少于 5 条不出汇总，直接读原文更快。', '「反复提到的」最多 3 条，每条条数 + 一句原文引用。标「AI 整理」。不算分，不做跳转。'],
     notes: [
       ['放哪', '「反馈」tab 顶部（活动反馈方案：只有文字、无评分、仅主办方可见）。'],
       ['交互', '反馈 ≥ 5 条时出现一个可折叠块「反复提到的」：最多 3 条，每条「场地难找 · 3 条」+ 一句原文引用。只是汇总，下面原文列表照常。想追问「场地难找具体指什么」，进 X02 数据对话。'],
       ['不做', '不算情绪分、不算平均分、不排「最有价值反馈」、不做点条数跳转。反馈方案里明确不打分，汇总也不能变相打分。'],
-      ['层级 · 优先级', '结构层。<code>P0</code>']
+      ['层级 · 优先级', '结构层。<code>P1</code> · 反馈 ≥ 5 条才有用，多数小场次用不到；用到时省的是读几十段的时间。']
     ],
     render: function (s, h) {
       var head = '<div style="display:flex;align-items:center;gap:12px"><h3 class="ce2-panel-h3">反馈</h3><span style="font-size:13px;color:var(--v-text-tertiary)">' + (s === 0 ? '3 条' : '12 条') + ' · 只有管理人员看得到</span><button type="button" class="al-btn" style="margin-left:auto">导出 CSV</button></div>';
@@ -112,14 +112,14 @@
 
   // ---------- D02 数据 tab：四块固定 + 「问 AI」进对话 ----------
   R({
-    id: 'D02', stage: 'after', title: '数据 tab：四块固定，想问什么进对话', where: 'pub-c-editor · 「数据」tab', surface: 'web', flag: 'P1',
+    id: 'D02', stage: 'after', title: '数据 tab：四块固定，想问什么进对话', where: 'pub-c-editor · 「数据」tab', surface: 'web', flag: 'P2',
     states: ['数据 tab · 入口', '点了「问 AI」· 进对话页'],
     stateNotes: ['tab 上只有这场的四块固定数据和一个「问 AI」按钮。不做筛选器，不做条件 chip。', '进独立的对话页（X02），会话自动带上这场的数据范围。问法见 X02。'],
     notes: [
       ['放哪', '结束态工作台多一个「数据」tab。四块固定：报名、签到、问卷、反馈。'],
       ['为什么不做筛选器', '主办方要的不是筛选器，是答案。问一句比拼条件快。所以这里只留入口，分析全部在对话页（X02）做。'],
       ['数据范围', '只有这一场：报名记录（来源、时间、状态）、签到记录、问卷回答、反馈、通知发送记录。进对话时作为上下文带过去，右侧看得见。'],
-      ['层级 · 优先级', '结构层。<code>P1</code>']
+      ['层级 · 优先级', '结构层。<code>P2</code> · 数据页本身已做（E01–E03），这里只加一个「问 AI」入口；多数主办方看四块数字就够。']
     ],
     render: function (s, h) {
       if (s === 1) return chatShell(h, { on: 'data', about: '创业者夜聊 Vol.7 · 已结束', from: '从「数据」tab 进来', body: '<div class="al-cp-empty"><span class="al-orb-mini" style="width:44px;height:44px;border-radius:14px">' + h.SPARK + '</span><h4>问这场的数据</h4><p>报名 38 · 签到 24 · 问卷 27 份 · 反馈 12 条 · 只有这一场</p><div class="al-cp-starts">' + [['做设计的来了几个', '标签 + 签到'], ['哪个时段签到最多', '签到时间分布'], ['没到的人有什么共同点', '只答报名字段上的事实'], ['反馈里「场地难找」具体指什么', '反馈原文']].map(function (q) { return '<div class="al-cp-start">' + q[0] + '<small>' + q[1] + '</small></div>'; }).join('') + '</div></div>',
@@ -130,80 +130,62 @@
     }
   });
 
-  // ---------- D03 主办方介绍：AI 起草，资料不够进对话 ----------
+  // ---------- A00 主办方介绍：AI 起草，资料不够进对话 ----------
   R({
-    id: 'D03', stage: 'after', title: '主办方介绍：AI 起草，资料不够就追问', where: 'pub-a-host-identity · 「品牌介绍」', surface: 'web', flag: 'P2',
+    id: 'A00', stage: 'create', title: '主办方介绍：AI 起草，资料不够就追问', where: 'pub-a-host-identity · 「品牌介绍」', surface: 'web', flag: 'P0',
     states: ['字段为空 · 一个按钮', '已起草', '资料不够 · 同一个按钮进对话页'],
-    stateNotes: ['只有「AI 起草」一个按钮，不另设「问问 AI」。', '办过活动的主办方：从办过的活动、常用标签、到场总数写 3 句。', '刚创建、还没办过活动的主办方：点同一个「AI 起草」进独立对话页，AI 先列已知的（创建人名片），再问 2 个问题（给谁办、想让人记住什么），答完回填。'],
+    stateNotes: ['只有「AI 起草」一个按钮，不另设「问问 AI」。', '办过活动的主办方：从办过的活动、常用标签、到场总数写 3 句。', '刚创建、还没办过活动的主办方：点同一个「AI 起草」进独立对话页，AI 先列已知的（创建人名片），再问 2 个问题（给谁办、想让人记住什么），答完确认后使用。'],
     notes: [
-      ['放哪', 'pub-a-host-identity / pub-k 的「品牌介绍」字段。'],
+      ['放哪', '创建前的主办方资料 / 主办方设置「品牌介绍」。可跳过，完善后进入 A01 创建活动。'],
       ['起草依据', '办过的活动（名称、标签、到场数）、主办方一句话头衔、创建人的个人名片（经历、此刻）。'],
-      ['资料不够时', '同一个「AI 起草」按钮进独立对话页（X01 同一页）：AI 先说已知道的，再一次问一个问题，最多 3 个，答完产出 3 句介绍回填字段。够不够按 X00：≥ 1 场活动，或创建人名片有经历。'],
-      ['层级 · 优先级', '表现层。<code>P2</code>']
+      ['资料不够时', '同一个「AI 起草」按钮进独立对话页（X01 同一页）：AI 先说已知道的，再一次问一个问题，最多 3 个，答完整理出的内容 3 句介绍更新相应信息。够不够按 X00：已有相关活动记录，或创建人名片有相关经历。'],
+      ['层级 · 优先级', '表现层。<code>P0</code>']
     ],
     render: function (s, h) {
       if (s === 2) {
-        return chatShell(h, { on: 'brand', about: '慢读俱乐部 · 主办方设置', from: '从「品牌介绍」的 AI 起草进来 · 还没办过活动', back: '返回设置', placeholder: '说一句，或点上面的',
-          body: known(h, [['主办方「慢读俱乐部」，创建于昨天，还没办过活动', '主办方资料'], ['创建人名片：「前编辑，2024 年起组织线下读书会」', '个人名片'], ['一句话头衔「每月一本，慢慢读」', '主办方资料']]) +
-            aiSay(h, '这些读书会主要是办给谁的？', '问题 1 / 3 · 点一个，或自己写<div class="al-chat-quick">' + h.fchip('平时没时间读完一本书的人') + h.fchip('想找人一起讨论的读者') + h.fchip('特定类型：城市 / 小说 / 非虚构') + '</div>') +
+        return chatShell(h, { on: 'brand', about: '慢读俱乐部 · 主办方设置', from: '从「品牌介绍」的 AI 起草进来 · 还没办过活动', back: '返回主办方介绍', placeholder: '说一句，或点上面的',
+          body: known(h, [['主办方「慢读俱乐部」，创建于昨天，还没办过活动', '主办方资料'], ['创建人名片：「喜欢读书，想开始组织线下讨论」', '个人名片'], ['一句话头衔「每月一本，慢慢读」', '主办方资料']]) +
+            aiSay(h, '这些读书会主要是办给谁的？', '先了解你的读者 · 点一个，或自己写<div class="al-chat-quick">' + h.fchip('平时没时间读完一本书的人') + h.fchip('想找人一起讨论的读者') + h.fchip('特定类型：城市 / 小说 / 非虚构') + '</div>') +
             userSay('想找人一起讨论的读者，一本书分四周读') +
-            aiSay(h, '来过的人，你希望他们记住这个主办方的哪一点？', '问题 2 / 3<div class="al-chat-quick">' + h.fchip('每次都读完') + h.fchip('小场，每个人都能说话') + h.fchip('选书有品味') + '</div>'),
-          ctx: outPanel(h, [['品牌介绍', '再答 1 题就能写', true], ['已确定', '给想一起讨论的读者办 · 一本书分四周']], '<button type="button" class="al-btn al-btn--sm" disabled>回填并返回</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">不问了，直接写</button>') });
+            aiSay(h, '来过的人，你希望他们记住这个主办方的哪一点？', '再了解你想带来的体验<div class="al-chat-quick">' + h.fchip('每次都读完') + h.fchip('小场，每个人都能说话') + h.fchip('选书有品味') + '</div>'),
+          ctx: outPanel(h, [['品牌介绍', '还需要了解你希望读者记住什么', true], ['已确定', '给想一起讨论的读者办 · 一本书分四周']], '<button type="button" class="al-btn al-btn--sm" disabled>确认主办方介绍</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">返回自行填写</button>') });
       }
       var body = h.panel('主办方', '出现在主办方主页顶部。',
         '<div style="margin-top:18px;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--v-border-subtle);background:var(--v-bg-surface)"><span class="ce2-guest-avatar" style="border-radius:12px">V</span><div><div class="ce2-guest-name">Vibers Shanghai</div><div class="ce2-guest-meta">14 场活动 · 来过 214 人 · 创建于 2025 年 3 月</div></div></div>' +
         h.field('一句话头衔', h.input('上海的创业者和独立开发者线下局')) +
-        h.field('品牌介绍', s === 0 ? h.textarea('', '写给参加过你活动的人') : h.textarea('从 2025 年起在上海办了 14 场线下活动：创业者夜聊、独立开发者 Demo Day、慢读会。来过 214 人，多数在做 AI 产品、独立开发或设计。每场 20 到 80 人，需审核，免费为主。'), s === 0 ? h.aiBtn('AI 起草') : h.srcChip('draft') + '<span style="font-size:12px;color:var(--v-text-tertiary)">从办过的活动写的</span>'));
-      return h.webShell({ title: 'Vibers Shanghai', sub: '主办方设置', tabs: ['主办方', '成员与权限', '主页预览'], tab: '主办方', actions: '<button type="button" class="ce2-btn-outline">保存</button>', body: body });
+        h.field('品牌介绍', s === 0 ? h.textarea('', '介绍你为谁办活动、希望带来什么') : h.textarea('从 2025 年起在上海办了 14 场线下活动：创业者夜聊、独立开发者 Demo Day、慢读会。来过 214 人，多数在做 AI 产品、独立开发或设计。每场 20 到 80 人，需审核，免费为主。'), s === 0 ? h.aiBtn('AI 起草').replace('<button ', '<button data-go="A00" data-go-state="1" ') : h.srcChip('draft') + '<span style="font-size:12px;color:var(--v-text-tertiary)">从办过的活动写的</span>'));
+      return h.webShell({ title: 'Vibers Shanghai', sub: '主办方设置', tabs: ['主办方', '成员与权限', '主页预览'], tab: '主办方', actions: '<button type="button" class="ce2-btn-outline" data-go="A01">保存并创建活动</button><button type="button" class="al-btn al-btn--ghost" data-go="A01">先创建活动</button>', body: body });
     }
   });
 
-  // ========== 06 AI 对话 · 独立页面 ==========
+  // ========== 01 AI 对话 · 独立页面 ==========
   // ---------- X00 够不够：直接生成，还是先聊 ----------
-  var GATES = [
-    ['帮我起名', '一句话介绍 ≥ 10 字，或详情 ≥ 30 字，或（标签 ≥ 1 且嘉宾 ≥ 1）', '名称本身不算，要起的就是它', '进对话，问主题', 'A08'],
-    ['一句话介绍 · AI 起草', '名称有主题词（去掉「Vol.8 / 第 N 期 / 活动 / 聚会」后还剩 ≥ 4 字），或详情 ≥ 30 字', '日期、地点、嘉宾、标签', '进对话，问主题', 'A02'],
-    ['活动详情 · AI 起草', '主题信号（名称或一句话介绍）+ 日期', '地点、嘉宾、标签、票价、审核。缺的写「（地点待定）」，不编', '进对话，问主题', 'A02'],
-    ['AI 润色', '字段里有内容', '—', '不进对话，永远直接润色', 'A02'],
-    ['品牌介绍 · AI 起草', '≥ 1 场已发布活动，或创建人名片有 ≥ 1 条经历', '常用标签、到场总数', '进对话，问给谁办、想让人记住什么', 'D03'],
-    ['嘉宾推荐', '主题信号 + 标签 ≥ 1', '往期嘉宾、来过的人', '进对话，先定主题', 'B04 · X01'],
-    ['海报生成', '名称 + 日期 + 公开地址（线上则会议标记）', '嘉宾、一句话介绍', '不进对话。核对页把缺的标红，让用户填', 'A05'],
-    ['标签建议', '名称有主题词，或一句话介绍 ≥ 10 字', '往期标签、同类活动', '不进对话，也不出建议', 'A03'],
-    ['起草条解析', '有任何输入', '—', '没解析出主题时，结果行给「去聊两句」', 'A01'],
-    ['问数据', '活动已发布', '—', '直接进对话（X02），数据不够就说「这场数据里没有」', 'D02 · X02']
-  ];
+  var GATES = [["起名、介绍、详情", "看得出这场具体聊什么或做什么", "直接起草；缺时间、地点就写待定", "看不出主题 → 先问「这场想聊什么？」"], ["主办方介绍", "已有相关活动记录或创建人的经历", "从已有资料起草，不编历史与成绩", "资料不足 → 先问「你想为谁办活动？」"], ["润色已有文字", "字段里已经有文字", "直接润色，先预览再确认", "字段为空 → 按起草流程判断"], ["海报", "名称、日期、公开地点已确认；线上活动有线上标记", "先核对，再生成海报", "缺事实 → 回表单补，不让 AI 猜"], ["其他动作", "解析有输入；标签和嘉宾推荐有相关主题；问数据有可用记录", "按各动作范围处理", "没有输入先输入；没有候选或记录就说明缺少什么"]];
   R({
-    id: 'X00', stage: 'chat', title: '够不够：直接生成，还是先聊', where: '所有「AI 起草 / 帮我起名」按钮点下去的第一步 · 服务端判定', surface: 'wide', flag: 'P0',
-    states: ['判定标准表', '够了 · 直接生成', '不够 · 先聊，不乱生成'],
-    stateNotes: ['每个 AI 动作一条硬门槛。缺就进对话，不硬生成。门槛是确定的规则，不是模型的感觉。', '例：活动名称空，但一句话介绍有 22 字 → 「帮我起名」直接出三个候选。', '例：名称和介绍都空 → 点同一个「帮我起名」，按钮下方一行说明为什么，然后进对话页。'],
-    notes: [
-      ['原则', '<b>信息够就直接生成，不够就不生成。</b>不够时跳到独立对话页，先把主题聊定，再回来生成。判断只看两件事：<b>主题定了没</b>、<b>事实字段齐不齐</b>。不看字数多少，不看写得好不好。'],
-      ['主题信号（大多数门槛的核心）', '满足任一即算有主题：① 名称去掉序号和泛词（Vol.8、第 N 期、活动、聚会、局、夜聊）后还剩 ≥ 4 个字；② 一句话介绍 ≥ 10 字；③ 详情 ≥ 30 字；④ 复制自往期活动（沿用上期主题）。反例：「周六聚会」「Vol.8」「新活动」都不算。'],
-      ['事实字段不拦生成', '日期、地点、票价、审核、人数缺了不进对话，因为它们要么有默认值，要么是事实。生成时缺的写占位「（时间待定）」，<b>绝不编一个出来</b>。'],
-      ['怎么判', '第一层规则（长度 + 泛词表），毫秒级；第二层一次很小的模型调用，只回答「这段文字看得出活动主题吗」和「缺什么：主题 / 给谁 / 形式」。两层都过才直接生成。缺什么决定对话页第一个问题问什么。'],
-      ['对用户怎么说', '进对话前按钮下方一行灰字说明，例「还不知道这场聊什么，先问你两个问题」。不弹窗，不报错。'],
-      ['层级 · 优先级', '范围层。<code>P0</code>，所有 AI 起草类动作共用。']
-    ],
+    id: 'X00', stage: 'chat', title: '直接起草还是先聊：看信息与下一步', where: '活动 AI 对话内：决定直接整理还是先问缺少的信息', surface: 'wide', flag: 'P0',
+    states: ['怎么判断 · 看信息与下一步', '够了 · 直接生成', '不够 · 先聊，不乱生成'],
+    stateNotes: ['先看三种处理方式，再用两组例子理解主题是否清楚；各动作只列已有信息和下一步。', '已有文字明确说出 AI 产品冷启动主题，直接出三个名字；不要求凑够字数。', '只有时间和活动形式，还不知道具体主题；先问主题，日期地点不重复问。'],
+    notes: [["核心标准", "看现有信息能否支撑当前动作。写活动文案需要清楚的主题；做海报需要确认的事实。没有一条通用的「缺了就进对话」规则。"], ["什么叫主题清楚", "能用一句话说出这场聊什么或做什么。「聊 AI 产品如何找到第一批用户」清楚；「周六聚会」「Vol.8」只有时间或期数。短但明确也可以，写得长不代表清楚。"], ["缺信息怎么接", "缺主题或主办方定位，问一个具体问题；缺日期、地点等事实，留待定或请用户填。草稿可待定，海报和发布必须核对必要事实。"], ["实现备注", "字数与泛词只用于内部初筛，不能独立决定主题是否清楚。服务端结合当前动作、相关文字与来源判断；不清楚时说明缺什么。"], ["确认边界", "起草、润色后展示结果，确认后才用于活动信息；发布和发送仍由人执行。"], ["层级 · 优先级", "范围层。<code>P0</code>，活动 AI 内部共用；不会拦在入口前。"]],
     render: function (s, h) {
       if (s === 0) {
-        var table = '<div class="al-facts" style="margin-top:18px"><div class="al-fact" style="background:var(--v-bg-surface)"><span class="k" style="width:150px;font-weight:500;color:var(--v-text-secondary)">动作</span><span class="v" style="flex:2;font-size:12px;color:var(--v-text-tertiary)">硬门槛 · 缺了就进对话</span><span class="v" style="flex:1.4;font-size:12px;color:var(--v-text-tertiary)">加分项 · 缺了也生成，写占位</span><span class="v" style="flex:1.3;font-size:12px;color:var(--v-text-tertiary)">不够时</span><span class="x">场景</span></div>' +
-          GATES.map(function (g) { return '<div class="al-fact" style="align-items:flex-start;padding:12px 14px"><span class="k" style="width:150px;font-size:13px;color:var(--v-text-primary);font-weight:500">' + g[0] + '</span><span class="v" style="flex:2;line-height:19px">' + g[1] + '</span><span class="v" style="flex:1.4;line-height:19px;color:var(--v-text-secondary)">' + g[2] + '</span><span class="v" style="flex:1.3;line-height:19px;color:var(--v-text-secondary)">' + g[3] + '</span><span class="x">' + g[4] + '</span></div>'; }).join('') + '</div>' +
-          '<div class="al-summary" style="margin-top:16px;padding:14px 16px"><div class="al-summary-head">主题信号 · 满足任一即算有</div><div class="al-summary-item"><b>①</b><span>名称去掉序号和泛词后还剩 ≥ 4 个字</span></div><div class="al-summary-item"><b>②</b><span>一句话介绍 ≥ 10 字</span></div><div class="al-summary-item"><b>③</b><span>详情 ≥ 30 字</span></div><div class="al-summary-item"><b>④</b><span>复制自往期活动</span></div><div style="margin-top:10px;font-size:12px;color:var(--v-text-tertiary)">泛词表：活动、聚会、局、夜聊、分享会、Vol.N、第 N 期、新活动 · 反例「周六聚会」「Vol.8」都不算有主题</div></div>';
-        return h.webShell({ tabs: [], title: '够不够 · 判定标准', sub: '服务端固定规则 · 所有 AI 起草类动作共用', actions: '', body: '<h3 class="ce2-panel-h3">直接生成，还是先聊</h3><p class="ce2-panel-sub">每个动作一条硬门槛。够了直接生成；不够进对话页，聊定主题再生成。事实字段缺了不拦，写占位不编。</p>' + table });
+        var choices = h.panel('先看下一步', '按缺少的信息处理，不需要记字数或公式。',
+          '<div class="al-facts"><div class="al-fact"><span class="k">直接起草</span><span class="v">已经知道具体主题，或已有可润色的文字。</span></div><div class="al-fact"><span class="k">先聊一句</span><span class="v">还不知道聊什么、做什么，或主办方想为谁办活动。</span></div><div class="al-fact"><span class="k">补真实信息</span><span class="v">缺日期、地点等事实。文案可写待定，海报与发布前要补齐。</span></div></div>');
+        var examples = h.panel('什么算「主题清楚」？', '能说出具体内容就可以；短也可以，长也不一定够。',
+          '<div class="al-facts"><div class="al-fact"><span class="k">可以直接写</span><span class="v">「聊 AI 产品怎么找到第一批用户」<br>已知道内容：AI 产品的冷启动。时间地点还未确定也能先写草稿。</span></div><div class="al-fact"><span class="k">先问主题</span><span class="v">「周六聚会」「产品夜聊 Vol.8」<br>只知道时间、形式或期数，还不知道这一场具体聊什么。</span></div></div>');
+        var table = h.panel('不同动作，怎么接下一步', '缺主题才追问主题；缺事实回到表单补。', '<div class="al-facts">' + GATES.map(function (g) {
+          return '<div class="al-fact"><span class="k">' + g[0] + '</span><span class="v"><strong>已有信息：</strong>' + g[1] + '<br><strong>有了以后：</strong>' + g[2] + '<br><strong>信息不足：</strong>' + g[3] + '</span></div>';
+        }).join('') + '</div>');
+        return h.webShell({ tabs: [], title: '直接起草，还是先聊？', sub: '看现有信息能否支撑这一步', actions: '', body: choices + examples + table });
       }
       var enough = s === 1;
       var title = '<div class="ce2-create-title ce2-create-title--empty">活动名称</div><div style="margin-top:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">' + h.aiBtn('帮我起名', { inline: true }) +
-        (enough ? '<span style="font-size:12px;color:var(--v-text-tertiary)">' + h.ICON.check.replace('width="16" height="16"', 'width="12" height="12" style="color:var(--v-status-approved-text);vertical-align:-2px"') + ' 一句话介绍有 22 字，够了 · 直接出候选</span>' : '<span style="font-size:12px;color:var(--v-text-tertiary)">还不知道这场聊什么 · 点了先问你两个问题，不会硬编</span>') + '</div>' +
+        (enough ? '<span style="font-size:12px;color:var(--v-text-tertiary)">' + h.ICON.check.replace('width="16" height="16"', 'width="12" height="12" style="color:var(--v-status-approved-text);vertical-align:-2px"') + ' 已经知道要聊 AI 产品冷启动 · 直接出候选</span>' : '<span style="font-size:12px;color:var(--v-text-tertiary)">还不知道这场聊什么 · 点了先问你两个问题，不会硬编</span>') + '</div>' +
         (enough ? '<div class="ce2-tag-chips" style="margin-top:10px">' + h.suggest('产品夜聊 Vol.8 · 第一批用户') + h.suggest('找到前 100 个用户') + h.suggest('AI 产品冷启动夜聊') + '</div>' : '');
       var about = enough ? '<div class="ce2-create-about">聊 AI 产品怎么找到第一批用户，带着正在做的东西来。</div>' : '<div class="ce2-create-about ce2-create-about--empty">一句话说清楚这是场什么活动，可以先空着</div>';
-      var gate = '<div class="al-summary" style="margin-top:20px;padding:12px 14px"><div class="al-summary-head">判定 · 帮我起名</div>' +
-        '<div class="al-summary-item"><b style="color:' + (enough ? 'var(--v-status-approved-text)' : 'var(--v-status-rejected-text)') + '">' + (enough ? '过' : '缺') + '</b><span>一句话介绍 ≥ 10 字 · ' + (enough ? '22 字' : '空') + '</span></div>' +
-        '<div class="al-summary-item"><b style="color:var(--v-status-rejected-text)">缺</b><span>详情 ≥ 30 字 · 空</span></div>' +
-        '<div class="al-summary-item"><b style="color:var(--v-status-rejected-text)">缺</b><span>标签 ≥ 1 且嘉宾 ≥ 1 · 都空</span></div>' +
-        '<div style="margin-top:10px;font-size:12px;color:var(--v-text-tertiary)">' + (enough ? '任一满足即可 → 直接生成三个候选' : '一个都不满足 → 进对话页，第一个问题问「主题」') + '</div></div>';
+      var gate = h.panel('为什么走这一步', '', '<div class="al-facts"><div class="al-fact"><span class="k">已经知道</span><span class="v">' + (enough ? '主题：AI 产品如何找到第一批用户。' : '日期、时间和地点；还没有具体主题。') + '</span></div><div class="al-fact"><span class="k">下一步</span><span class="v">' + (enough ? '直接起三个名字，选一个才写入。' : '先问「这场想聊什么？」；已经填过的事实不重复问。') + '</span></div></div>');
       var body = '<div class="ce2-create"><div class="ce2-create-cover-col"><div class="ce2-cover" style="height:225px;border-radius:20px"><div class="ce2-cover-fallback"><div class="ce2-cover-fallback-glow"></div><div class="ce2-cover-fallback-mark">' + h.ICON.img + '</div></div><span class="ce2-cover-badge">默认封面</span></div>' + gate + '</div>' +
         '<div class="ce2-create-form-col">' + title + about + '<div class="ce2-create-block"><div class="ce2-create-row"><span class="ce2-create-row-icon">' + h.ICON.cal + '</span><div>10 月 8 日 周四</div></div><div class="ce2-create-row"><span class="ce2-create-row-icon">' + h.ICON.clock + '</span><div>19:30–21:30</div></div><div class="ce2-create-row"><span class="ce2-create-row-icon">' + h.ICON.pin + '</span><div>深圳南山 · 科兴科学园</div></div></div>' +
-        (enough ? '' : '<div class="al-ask" style="margin-top:22px"><span class="al-ask-icon">' + h.SPARK + '</span><div class="al-ask-bubble">先问一句：这期想聊什么？<div class="al-ask-sub">进独立对话页 · 已知道的会先列出来 · 最多 4 个问题 · 答完回填名称和一句话介绍</div><div class="al-chat-quick">' + h.fchip('继续 →') + h.fchip('算了，我自己写') + '</div></div></div>') + '</div></div>';
+        (enough ? '' : '<div class="al-ask" style="margin-top:22px"><span class="al-ask-icon">' + h.SPARK + '</span><div class="al-ask-bubble">先问一句：这期想聊什么？<div class="al-ask-sub">进独立对话页 · 已知道的会先列出来 · 最多 4 个问题 · 答完确认活动名称和一句话介绍</div><div class="al-chat-quick">' + h.fchip('继续 →') + h.fchip('算了，我自己写') + '</div></div></div>') + '</div></div>';
       return h.webShell({ status: 'draft', title: '新活动', sub: 'Vibers Shanghai · 草稿', tabs: [], actions: '<button type="button" class="ce2-btn-outline">存草稿</button>', body: body });
     }
   });
@@ -211,36 +193,72 @@
   // ---------- X01 活动 AI 对话页（独立页面） ----------
   var KNOWN_NAME = [['日期 10 月 8 日周四 19:30，深圳南山，免费', '表单'], ['你办过 7 期产品夜聊，上一期聊「定价」', '往期活动'], ['你的名片「此刻」写着「在给定价工具找前 50 个付费用户」', '个人名片'], ['标签常用「创业」「AI」', '往期活动']];
   R({
-    id: 'X01', stage: 'chat', title: '活动 AI 对话页：独立页面，所有对话都在这', where: '独立路由 /host/chat?event=…&from=… · 从各字段的 AI 按钮进来，也能从工作台直接进', surface: 'wide', flag: 'P0',
-    states: ['空会话 · 快捷入口', '从「帮我起名」进来：先列已知，问第 1 个', '答了两轮：产出回填', '内容定了：推荐嘉宾和场地'],
-    stateNotes: ['独立页面，三栏：左边按活动分的会话列表，中间对话，右边「已知道的」和「会回填到」。从工作台直接进来是空会话，给这场活动的快捷入口。', '从字段进来时不是空会话：AI 先列它已经知道的（每条带来源），然后一次只问一个问题，问题从名片「此刻」「经历」里来。', '右侧「会回填到」实时更新。答够了出主题、一句话介绍、3 个标题，一键回填到表单再返回。', '内容定了之后接着推荐嘉宾（来过的人 / 关注的人 / 站内资料 / LinkedIn）和场地（用过的 / 同类活动常用），每条带理由，勾选加入。'],
+    id: 'X01', stage: 'chat', title: '活动 AI：创建与管理都在同一处', where: '独立路由 /host/chat?host=…&from=…（event 可省略） · 从各字段的 AI 按钮进来，也能从工作台直接进', surface: 'wide', flag: 'P0',
+    states: ['空会话 · 快捷入口', '从「帮我起名」进来：先列已知，问第 1 个', '信息已整理 · 请确认', '内容定了：推荐嘉宾和场地', '创建活动 · 输入想法或公告', '语音 · 确认识别的文字', '海报 · 查看识别的信息', '修改活动 · 确认具体改动', '通知 · 确认内容与收件人', '还没想法 · 从个人资料找灵感', '资料较少 · 先聊一句', '选中试玩小聚 · 继续完善', '选中经验夜聊 · 继续完善', '选中共创下午 · 继续完善'],
+    stateNotes: ['独立页面，三栏：左边按活动分的会话列表，中间对话，右边「已知道的」和「请确认以下信息」。从工作台直接进来是空会话，给这场活动的快捷入口。', '从字段进来时不是空会话：AI 先列它已经知道的（每条带来源），然后一次只问一个问题，问题从名片「此刻」「经历」里来。', '右侧「请确认以下信息」实时更新。答够了出主题、一句话介绍、3 个标题，确认后用于活动草稿，并返回编辑页。', '内容定了之后接着推荐嘉宾（来过的人 / 关注的人 / 站内资料 / LinkedIn）和场地（用过的 / 同类活动常用），每条带理由，勾选加入。'],
     notes: [
-      ['独立页面', '<b>一个独立路由</b>，不是弹窗、不是侧栏。所有和活动有关的 AI 对话都在这一页：起名 / 起草（信息不够时）、问数据（X02）、推荐嘉宾和场地、品牌介绍（D03）、写通知。会话按活动分组，切活动就切上下文。'],
-      ['三栏', '<b>左</b>：会话列表，按「这场 / 其他活动」分组，+ 新对话。<b>中</b>：对话，顶部一个「关于：哪场活动」chip 和「从哪进来」。<b>右</b>：「已知道的」（每条带来源）和「会回填到」（哪个字段、当前产出、回填按钮）。'],
-      ['进来的方式', '① 从字段的 AI 按钮进（X00 判定不够时），带 from 参数，会话预填已知和第一个问题；② 从数据 tab 进（D02）；③ 从工作台页头「问 AI」进，空会话。返回键回到来的地方。'],
+      ['独立页面', '<b>一个独立路由</b>，不是弹窗、不是侧栏。所有和活动有关的 AI 对话都在这一页：创建 / 修改活动 / 起名 / 起草 / 语音和海报整理、问数据（X02）、推荐嘉宾和场地、品牌介绍（A00）、写通知。创建前可以没有活动 ID，先带主办方资料与草稿；确认或退出都返回原来的编辑位置。会话按活动分组，切活动就切上下文。'],
+      ['三栏', '<b>左</b>：会话列表，按「这场 / 其他活动」分组，+ 新对话。<b>中</b>：对话，顶部显示当前活动 和「从哪进来」。<b>右</b>：「已知道的」（每条带来源）和「请确认以下信息」（哪个字段、建议内容、确认按钮）。'],
+      ['进来的方式', '① 从创建页或字段的 AI 按钮直接进入，带 from 参数，会话预填已知和第一个问题；② 从数据 tab 进（D02）；③ 从工作台页头「问 AI」进，空会话。返回键回到来的地方。'],
       ['开场规矩', '第一句先列已知道的，每条带来源（表单 / 主办方资料 / 个人名片 / 往期活动 / 报名数据）。用户不用重复说，也知道 AI 没瞎猜。'],
-      ['提问规矩', '一次只问一个问题，最多 4 个。每个问题给 2–3 个可点的选项，也能自己写。用户说「就这样」立刻回填并返回。'],
-      ['产出', '主题、一句话介绍、3 个标题候选；内容定了再加：嘉宾候选（≤ 3，带理由和话题）、场地候选（≤ 3）。全部勾选加入，不自动写入。'],
-      ['边界', '只回答和这场活动、这个主办方有关的事。问别的答「这里只聊活动的事」。不闲聊。'],
+      ['提问规矩', '一次只问一个问题；信息足够就展示结果，继续管理时可接着聊。每个问题给 2–3 个可点的选项，也能自己写。用户说「就这样」停止追问，展示待确认的信息；确认后用于活动信息。'],
+      ['整理出的内容', '主题、一句话介绍、3 个标题候选；内容定了再加：嘉宾候选（≤ 3，带理由和话题）、场地候选（≤ 3）。全部勾选加入，不自动写入。'],
+      ['边界', '围绕当前活动与主办方提供帮助。问题超出范围时，说明能帮助什么，例如「我可以帮你完善这场活动，想先改哪部分？」。'],
       ['层级 · 优先级', '结构层。<code>P0</code>']
     ],
     render: function (s, h) {
-      if (s === 0) return chatShell(h, { on: '', from: '从工作台页头「问 AI」进来', body: '<div class="al-cp-empty"><span class="al-orb-mini" style="width:44px;height:44px;border-radius:14px">' + h.SPARK + '</span><h4>这场活动，要做什么</h4><p>只聊创业者夜聊 Vol.7 和 Vibers Shanghai 的事</p><div class="al-cp-starts">' + [['给这场起名', '先问主题，再出候选'], ['写活动详情', '按流程 / 适合谁 / 带什么'], ['推荐嘉宾和场地', '按主题从来过的人里找'], ['看这场的数据', '报名 · 签到 · 问卷 · 反馈'], ['写一条通知', '按阶段给草稿'], ['参与者会问什么', '活动页没回答的']].map(function (q) { return '<div class="al-cp-start">' + q[0] + '<small>' + q[1] + '</small></div>'; }).join('') + '</div></div>',
-        ctx: known(h, KNOWN_NAME) + outPanel(h, [['还没有产出', '开始聊之后这里会显示会回填到哪个字段', true]]) });
-      var q1 = aiSay(h, '这期想聊的，是不是你自己正在卡的「找第一批付费用户」？', '问题 1 / 最多 4 · 点一个，或自己写<div class="al-chat-quick">' + h.fchip('对，就聊这个') + h.fchip('不是，聊别的') + h.fchip('聊冷启动，范围大一点') + '</div>');
-      if (s === 1) return chatShell(h, { on: 'name', from: '从「活动名称 · 帮我起名」进来 · 还没有介绍', back: '返回表单', body: known(h, KNOWN_NAME) + q1,
-        ctx: outPanel(h, [['活动名称', '还没定', true], ['一句话介绍', '还没定', true]], '<button type="button" class="al-btn al-btn--sm" disabled>回填并返回</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">不问了，直接写</button>') });
-      if (s === 2) return chatShell(h, { on: 'name', from: '从「活动名称 · 帮我起名」进来', back: '返回表单', body: known(h, KNOWN_NAME) + q1 + userSay('聊冷启动，范围大一点，不只是付费') +
-          aiSay(h, '来的人是带着问题来问，还是带着做好的东西来讲？', '问题 2 / 最多 4<div class="al-chat-quick">' + h.fchip('带问题来问') + h.fchip('带东西来讲') + h.fchip('都有，先讲后问') + '</div>') + userSay('都有，先讲后问，三个人讲') +
-          aiSay(h, '够了。主题：AI 产品的冷启动，三位创业者讲各自找到第一批用户的过程，再圆桌。右边是回填内容，改了再回填也行。', '<div class="al-chat-quick">' + h.fchip('就这样，回填') + h.fchip('再问我一个') + h.fchip('推荐嘉宾和场地') + '</div>'),
-        ctx: outPanel(h, [['主题', 'AI 产品的冷启动 · 先讲后问'], ['一句话介绍 ' + h.srcChip('draft'), '三位创业者讲怎么找到第一批用户，然后圆桌。带着正在做的东西来。'], ['活动名称 · 选一个', '<div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">' + h.suggest('产品夜聊 Vol.8 · 第一批用户') + h.suggest('冷启动夜聊：前 100 个用户') + h.suggest('AI 产品怎么找到第一批人') + '</div>']], '<button type="button" class="al-btn al-btn--primary al-btn--sm">回填并返回</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">再改改</button>') });
+      if (s === 4 || s >= 9) {
+        var ideas = [
+          ['产品试玩小聚', '邀请几位潜在用户试玩你的产品，听听真实反馈。', '你在个人资料里提到：正在找第一批用户。'],
+          ['冷启动经验夜聊', '找正在做产品的人，交流第一批用户从哪里来。', '你正在做独立产品，也希望认识同行。'],
+          ['周末共创下午', '大家带自己的项目来，一起解决一个具体问题。', '你的经历里有独立开发，也提到喜欢和人一起做东西。']
+        ];
+        var body, ctx;
+        if (s === 10) {
+          body = aiSay(h, '还没想法也没关系。最近有什么事，你想找人一起聊聊或做做？', '<div class="al-chat-quick"><button type="button" class="al-btn al-btn--sm" data-go="X01" data-go-state="11">想交流正在做的项目</button><button type="button" class="al-btn al-btn--sm">想认识兴趣相近的人</button><button type="button" class="al-btn al-btn--sm">想找人一起做件事</button></div>');
+          ctx = known(h, [['你的个人资料还没有填写经历或兴趣', '个人资料']]) + outPanel(h, [['活动方向', '先聊聊你最近关心的事', true]]);
+        } else if (s >= 11) {
+          var selected = ideas[s - 11];
+          body = userSay('我想办一场' + selected[0]) + aiSay(h, selected[1] + '你更想邀请潜在用户，还是一起做产品的同行？', '<div class="al-chat-quick"><button type="button" class="al-btn al-btn--sm">潜在用户</button><button type="button" class="al-btn al-btn--sm">做产品的同行</button><button type="button" class="al-btn al-btn--sm">两种人都想邀请</button></div>');
+          ctx = outPanel(h, [['你选的方向', selected[0]], ['活动介绍 · 可继续修改', selected[1]], ['接下来聊', '想邀请谁；时间地点可以稍后再定', true]]);
+        } else {
+          body = aiSay(h, '还没想好办什么？我看了你填写的个人资料，想到几个可以试试的方向。选一个聊聊，也可以直接说自己的想法。') + ideas.map(function (idea, i) {
+            return h.panel(idea[0], idea[1], '<p class="ce2-panel-sub">为什么想到这个：' + idea[2] + '</p><button type="button" class="al-btn al-btn--sm" data-go="X01" data-go-state="' + (11 + i) + '">聊聊这个想法</button>');
+          }).join('') + '<div class="al-chat-quick"><button type="button" class="al-btn al-btn--ghost al-btn--sm" data-go="X01" data-go-state="10">换个方向</button><button type="button" class="al-btn al-btn--ghost al-btn--sm" data-go="X01" data-go-state="10">我想自己说</button></div>';
+          ctx = known(h, [['经历：独立开发者', '个人资料 · 经历'], ['此刻：正在给自己的产品找第一批用户', '个人资料 · 此刻'], ['兴趣：认识同行，一起做东西', '个人资料 · 兴趣']]) + outPanel(h, [['活动还未创建', '先选一个方向聊聊，确定内容后再创建草稿。', true]]);
+        }
+        return chatShell(h, {convs:[['新活动', [['一起想个活动', true]]]],about:'新活动 · 找找灵感',from: s === 10 ? '还不了解你的经历与兴趣' : s >= 11 ? '从一个想法开始' : '根据你填写的个人资料提供灵感',back:'返回活动编辑',body:body,ctx:ctx,placeholder:'说说你的想法，也可以粘贴公告或上传海报'});
+      }
+
+      if (s >= 4) {
+        var examples = [
+          ['新活动 · 尚未创建', '从创建页「AI 起草」进入', '说说你想办什么活动，也可以粘贴群公告、用语音描述，或上传海报。我会把活动信息整理给你确认。', '', [['活动名称', '等待你的描述', true], ['时间与地点', '没有确定也可以先聊', true]]],
+          ['新活动 · 草稿', '语音描述活动', '你说的是：「下周四晚上七点半，在深圳南山办产品夜聊，聊 AI 产品怎么找到第一批用户。」你可以先修改这段文字，再让我整理活动信息。', '下周四晚上七点半，在深圳南山办产品夜聊，聊 AI 产品怎么找到第一批用户。', [['活动主题', 'AI 产品找到第一批用户'], ['开始时间', '10 月 8 日 19:30'], ['地点', '深圳南山，具体地点待定']]],
+          ['新活动 · 草稿', '上传海报：产品夜聊.jpg', '我从海报中找到了以下信息。海报没有写结束时间，请补充或先保留待定。具体门牌号只给报名成功的人看。', '产品夜聊.jpg · 海报已上传', [['活动名称', '产品夜聊 · 第一批用户'], ['日期', '10 月 8 日'], ['开始时间', '19:30'], ['结束时间', '待定', true], ['公开地点', '深圳南山 · 科兴科学园'], ['报名成功后可见', 'B 栋 2 楼 Hub 空间']]],
+          ['产品夜聊 · 报名中', '继续管理当前活动', '你想把开始时间改为 20:00。以下会同时更新活动时间和详情中的时间。已有 27 人报名，我也可以帮你起草改期通知，通知需你确认发送。', '把开场改成晚上八点，并通知报名的人。', [['开始时间', '19:30 → 20:00'], ['详情', '将「19:30 开场」改为「20:00 开场」']]],
+          ['产品夜聊 · 报名中', '起草活动通知', '通知已整理好，请核对内容和收件人。确认发送后，这 27 位报名成功的参与者会收到通知。', '告诉报名的人开场改到八点。', [['收件人', '27 位报名成功的参与者'], ['通知内容', '本场活动改为 20:00 开始，地点不变。详细地址见活动页。']]]
+        ];
+        var e=examples[s-4];
+        var buttons=s===4 ? '' : '<button type="button" class="al-btn al-btn--primary al-btn--sm" data-go="' + (s===8 ? 'N01' : s===7 || s===5 ? 'X01' : 'A01') + '" data-go-state="' + (s===7 ? '8' : s===8 ? '0' : s===5 ? '2' : '1') + '">' + (s===8 ? '确认发送给这 27 人' : s===7 ? '确认修改，再查看通知' : s===5 ? '使用这段文字整理活动' : '确认使用已确定的信息') + '</button>';
+        return chatShell(h,{convs: [[s <= 6 ? '新活动' : '产品夜聊 · 当前活动', [['创建与完善活动', s <= 6], ['修改活动信息', s === 7], ['通知参与者', s === 8]]], ['其他活动', [['创业者夜聊 Vol.7', false]]]],about:e[0],from:e[1],back:'返回活动编辑',body:(e[3]?userSay(e[3]):'')+aiSay(h,e[2]),ctx:outPanel(h,e[4],buttons),placeholder:'描述想法、粘贴群公告，或继续提出修改'});
+      }
+
+      if (s === 0) return chatShell(h, { on: '', from: '从工作台页头「问 AI」进来', body: '<div class="al-cp-empty"><span class="al-orb-mini" style="width:44px;height:44px;border-radius:14px">' + h.SPARK + '</span><h4>这场活动，要做什么</h4><p>可以帮你完善活动内容、起草通知，或了解报名与签到情况。</p><div class="al-cp-starts">' + [['创建新活动', '描述想法、粘贴公告或上传海报'], ['写活动详情', '按流程 / 适合谁 / 带什么'], ['推荐嘉宾和场地', '按主题从来过的人里找'], ['看这场的数据', '报名 · 签到 · 问卷 · 反馈'], ['写一条通知', '按阶段给草稿'], ['参与者会问什么', '活动页没回答的']].map(function (q) { return '<div class="al-cp-start">' + q[0] + '<small>' + q[1] + '</small></div>'; }).join('') + '</div></div>',
+        ctx: known(h, KNOWN_NAME) + outPanel(h, [['还没有建议内容', '聊完后，这里会展示活动名称、介绍等信息，供你确认。', true]]) });
+      var q1 = aiSay(h, '这期想聊的，是不是你自己正在卡的「找第一批付费用户」？', '先了解活动主题 · 点一个，或自己写<div class="al-chat-quick">' + h.fchip('对，就聊这个') + h.fchip('不是，聊别的') + h.fchip('聊冷启动，范围大一点') + '</div>');
+      if (s === 1) return chatShell(h, { on: 'name', from: '从「活动名称 · 帮我起名」进来 · 还没有介绍', back: '返回活动编辑', body: known(h, KNOWN_NAME) + q1,
+        ctx: outPanel(h, [['活动名称', '还未确定', true], ['一句话介绍', '还未确定', true]], '<button type="button" class="al-btn al-btn--sm" disabled>确认使用</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">返回自行填写</button>') });
+      if (s === 2) return chatShell(h, { on: 'name', from: '从「活动名称 · 帮我起名」进来', back: '返回活动编辑', body: known(h, KNOWN_NAME) + q1 + userSay('聊冷启动，范围大一点，不只是付费') +
+          aiSay(h, '来的人是带着问题来问，还是带着做好的东西来讲？', '再了解活动形式<div class="al-chat-quick">' + h.fchip('带问题来问') + h.fchip('带东西来讲') + h.fchip('都有，先讲后问') + '</div>') + userSay('都有，先讲后问，三个人讲') +
+          aiSay(h, '我们整理好了这场活动的方向：三位创业者分享找到第一批用户的过程，再一起讨论。请确认活动名称和介绍，有需要可以继续修改。', '<div class="al-chat-quick">' + '<button type="button" class="al-btn al-btn--primary al-btn--sm" data-go="A01" data-go-state="1">确认使用这些信息</button>' + h.fchip('继续完善信息') + h.fchip('推荐嘉宾和场地') + '</div>'),
+        ctx: outPanel(h, [['主题', 'AI 产品的冷启动 · 先讲后问'], ['一句话介绍 ' + h.srcChip('draft'), '三位创业者讲怎么找到第一批用户，然后圆桌。带着正在做的东西来。'], ['活动名称 · 选一个', '<div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">' + h.suggest('产品夜聊 Vol.8 · 第一批用户') + h.suggest('冷启动夜聊：前 100 个用户') + h.suggest('AI 产品怎么找到第一批人') + '</div>']], '<button type="button" class="al-btn al-btn--primary al-btn--sm" data-go="A01" data-go-state="1">确认使用这些信息</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">修改这些信息</button>') });
       var recs = [['沈', '沈一', '内容设计 · 前字节', '上期聊定价时来过 · 名片「此刻」：在做 B 端产品冷启动', '可以讲：从 0 到 50 个付费用户的两个月'], ['韩', '韩露', '独立开发者', '来过 3 场 · 作品里有一个刚上线的工具', '可以讲：只在群里发的坑'], ['L', 'Lin Zhao', 'Growth · 前 Notion China', 'LinkedIn · 你的一度联系人 · 做过 3 个产品的冷启动', '可以讲：第一批用户从哪来']];
       var venues = [['科兴科学园 Hub 空间', '你上 2 期用过 · 30 人 · 免费', true], ['南山 · 湾区书店二楼', '同类活动常用 · 40 人 · 需预约', false], ['深圳湾 · 创业广场路演厅', '同类活动常用 · 80 人 · 收费', false]];
-      return chatShell(h, { on: 'guest', from: '接着上一段 · 内容已定', back: '返回表单', placeholder: '还想找别的方向的嘉宾？说一句',
+      return chatShell(h, { on: 'guest', from: '接着上一段 · 内容已定', back: '返回活动编辑', placeholder: '还想找别的方向的嘉宾？说一句',
         body: userSay('推荐嘉宾和场地') + aiSay(h, '按「AI 产品的冷启动」找了 3 位嘉宾候选和 3 个场地。理由都来自对方资料和你的记录，勾了才加入。', '嘉宾候选 · 来过的人 / 关注的人 / 站内资料 / LinkedIn') +
           '<div class="jd-people">' + recs.map(function (r) { return '<div class="jd-person" style="align-items:flex-start"><input type="checkbox" class="fr-app-check" style="margin:8px 0 0"><span class="jd-person-av">' + r[0] + '</span><div style="flex:1;min-width:0"><div class="jd-person-name">' + r[1] + ' <span style="font-weight:400;color:var(--v-text-tertiary)">· ' + r[2] + '</span></div><div class="jd-person-sub">理由：' + r[3] + '</div><div style="margin-top:3px;font-size:12.5px;color:var(--v-text-primary)">' + r[4] + '</div></div></div>'; }).join('') + '</div>' +
           aiSay(h, '场地候选 · 你用过的 / 同类活动常用的') + '<div class="jd-people">' + venues.map(function (v) { return '<div class="jd-person"><input type="checkbox" class="fr-app-check" style="margin:0"' + (v[2] ? ' checked' : '') + '><span class="jd-person-av">' + h.ICON.pin + '</span><div><div class="jd-person-name">' + v[0] + '</div><div class="jd-person-sub">' + v[1] + '</div></div></div>'; }).join('') + '</div>',
-        ctx: outPanel(h, [['活动名称', '冷启动夜聊：前 100 个用户'], ['一句话介绍', '三位创业者讲怎么找到第一批用户，然后圆桌。'], ['嘉宾 tab', '勾选的人会进「待邀请」', true], ['公开地址', '深圳南山 · 科兴科学园']], '<button type="button" class="al-btn al-btn--primary al-btn--sm">回填并返回</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">再改改</button>') });
+        ctx: outPanel(h, [['活动名称', '冷启动夜聊：前 100 个用户'], ['一句话介绍', '三位创业者讲怎么找到第一批用户，然后圆桌。'], ['嘉宾名单', '勾选的人会进「待邀请」', true], ['公开地址', '深圳南山 · 科兴科学园']], '<button type="button" class="al-btn al-btn--primary al-btn--sm" data-go="A01" data-go-state="1">确认使用这些信息</button><button type="button" class="al-btn al-btn--ghost al-btn--sm">修改这些信息</button>') });
     }
   });
 
@@ -251,7 +269,7 @@
   }
   var DATA_CTX = [['报名 38 · 通过 27 · 拒绝 3 · 候补 8', '报名记录'], ['签到 24 / 27，最早 18:48', '签到记录'], ['问卷 2 题 · 27 份', '问卷'], ['反馈 12 条 · 已参与 9', '反馈']];
   R({
-    id: 'X02', stage: 'chat', title: '问数据：同一页对话，答数字、名单、图、事实句', where: '活动 AI 对话页 · 从「数据」tab 或工作台进来', surface: 'wide', flag: 'P1',
+    id: 'X02', stage: 'chat', title: '问数据：同一页对话，答数字、名单、图、事实句', where: '活动 AI 对话页 · 从「数据」tab 或工作台进来', surface: 'wide', flag: 'P2',
     states: ['「做设计的来了几个」', '「哪个时段签到最多」', '「没到的人有什么共同点」'],
     stateNotes: ['答一个数字 + 名单，右侧能导出。不显示筛选条件，只在回答里说清楚算的是什么。', '答一张小图。数据来自签到记录。', '只答报名字段上的事实：审核方式、报名时间、来源。不评价人，人少就说人少。'],
     notes: [
@@ -260,7 +278,7 @@
       ['怎么答', '数字 + 一句话说清算的是什么（「标签有设计且已签到」）+ 名单或图。不出筛选器、不出条件 chip。追问直接接着问（「其中来过 2 次以上的呢」）。'],
       ['规矩', '不给人打分、不排序人、不预测。「没到的人有什么共同点」只答报名字段上的事实，不答「不够积极」这类判断。答不了的说「这场数据里没有」。'],
       ['导出', '问出来的名单右侧可以导出 CSV，进管理记录。'],
-      ['层级 · 优先级', '结构层。<code>P1</code>']
+      ['层级 · 优先级', '结构层。<code>P2</code> · 办到第 5 场以上、人多了才会想问；前面几场四块数字够用。']
     ],
     render: function (s, h) {
       var q = ['做设计的来了几个', '哪个时段签到最多', '没到的人有什么共同点'][s];

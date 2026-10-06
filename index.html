@@ -1,3 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=pages/ai-lab.html"><title>AI 辅助原型 · Vibers</title></head>
-<body><a href="pages/ai-lab.html">打开 AI 辅助原型</a></body></html>
+<html lang="zh-CN" data-v-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibers 核心页面 High-Fi v1</title>
+<link rel="icon" type="image/svg+xml" href="assets/brand/icon/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<script src="assets/brand/vibers-marks.js"></script>
+</head>
+<body>
+<div style="padding:64px 72px 80px;max-width:2000px">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="display:inline-flex;width:19px;height:23px;color:var(--v-text-primary)"><vb-v style="width:19px;height:23px"></vb-v></span>
+    <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,239,.42)">Vibers · 氛围派</span>
+    <span style="width:1px;height:14px;background:rgba(245,243,239,.14)"></span>
+    <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.06em;color:rgba(245,243,239,.42)">01 · 小程序页 High-Fidelity</span>
+  </div>
+
+  <h1 style="font:500 clamp(44px,5.4vw,76px)/1.02 Sora,'Noto Sans SC',sans-serif;letter-spacing:-.035em;margin:34px 0 0;max-width:1100px">小程序页<br><span style="color:rgba(245,243,239,.3)">390 × 844 · 从开屏、Discover 到 Host 主页的完整用户侧原型</span></h1>
+  <p style="max-width:760px;margin:26px 0 0;font-size:16px;line-height:29px;color:rgba(245,243,239,.62)">用户侧小程序的 10 个核心页面：开屏、发现、活动详情、名片、发起活动、报名、签到、消息、Host 主页、嘉宾落地页。信息架构沿用 v10 原型，只升级了视觉和交互。页面里的封面都是占位框，把真实图片拖进去就能预览。</p>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 0">
+    <a href="pages/splash.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(237,106,44,.4);font:500 12px/1 Sora,sans-serif;color:rgba(237,106,44,.92)">入口 · 小程序开屏</a>
+    <span style="width:1px;height:32px;background:rgba(245,243,239,.14);margin:0 2px"></span>
+    <a href="pages/a-discover.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">A · Discover</a>
+    <a href="pages/b-event-detail.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">B · 活动详情</a>
+    <a href="pages/c-profile.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">C · Profile 名片</a>
+    <a href="pages/d-create-event.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">D · Create Event</a>
+    <a href="pages/e-register-flow.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">E · 报名 → 支付 → 状态</a>
+    <a href="pages/f-host-review.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">F · Host 审核台 1440</a>
+    <a href="pages/g-checkin.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">G · 现场签到</a>
+    <a href="pages/h-messages.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">H · 消息</a>
+    <a href="pages/i-host-home.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">I · Host 主页</a>
+    <a href="pages/j-guest-landing.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">J · 嘉宾落地页</a>
+  </div>
+
+  <div style="margin-top:64px;padding-top:40px;border-top:1px solid var(--v-border-default)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="display:inline-flex;width:19px;height:23px;color:var(--v-text-primary)"><vb-v style="width:19px;height:23px"></vb-v></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,239,.42)">Vibers · 氛围派</span>
+      <span style="width:1px;height:14px;background:rgba(245,243,239,.14)"></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.06em;color:rgba(245,243,239,.42)">02 · 活动发布 High-Fi v1</span>
+    </div>
+    <h2 style="font:500 clamp(30px,3.6vw,44px)/1.1 Sora,'Noto Sans SC',sans-serif;letter-spacing:-.03em;margin:24px 0 0;max-width:900px">活动发布流程<br><span style="color:rgba(245,243,239,.3)">从个人账户到 Host · 起草 → 发布 → 后台管理 · 深浅色模式一套，右上角可切换</span></h2>
+    <p style="max-width:760px;margin:18px 0 0;font-size:15px;line-height:26px;color:rgba(245,243,239,.62)">主办方（Host）发活动的完整流程，共 6 个页面：网页落地页 / 登录入口，账户结构，然后是一个「活动工作台」——创建时只填必填三项（名称 / 日期 / 公开地址）就能发布，票价 / 审核 / 人数带默认值，嘉宾、标签、问卷这些非必填项发布后由「接下来完善」引导补全，分享也收在工作台里；发布后可从「通知参与者」给报名的人发通知（活动页同步显示，开场前 1 天与 1 小时还有默认开启的自动提醒），活动日期一过工作台自动切换成收尾：回顾到场、群发感谢、收集反馈。草稿和已发布状态共用同一套界面。发布后到 Host 后台的概览、活动、报名审核、设置。页面之间有真实跳转，按钮会带你到对应页面。</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0">
+      <a href="pages/landing.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(237,106,44,.4);font:500 12px/1 Sora,sans-serif;color:rgba(237,106,44,.92)">入口 · 网页落地页 / 登录</a>
+      <a href="pages/pub-a-host-identity.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(237,106,44,.4);font:500 12px/1 Sora,sans-serif;color:rgba(237,106,44,.92)">入口 · 创建主办方</a>
+      <span style="width:1px;height:32px;background:rgba(245,243,239,.14);margin:0 2px"></span>
+      <a href="pages/pub-a-host-identity.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">A · 账户结构</a>
+      <a href="pages/pub-c-editor.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">B · 活动工作台（极简创建 → 发布 → 引导完善 → 通知与收尾，一个页面）</a>
+      <a href="pages/pub-j-host-dashboard.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">J · Host 后台</a>
+      <a href="pages/pub-k-host-homepage.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">K · 主页预览</a>
+      <a href="pages/pub-l-members.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">L · Host 设置</a>
+    </div>
+    <div style="margin-top:20px;font-size:12.5px;line-height:21px;color:rgba(245,243,239,.4);max-width:640px">这一部分覆盖设计文件里能读到的 12 个分组。另有 6 个更深的子流程（手机审核、签到、控制台、通知、取消改期、评价），源文件在读到它们之前被截断，所以还没建。</div>
+  </div>
+
+  <div style="margin-top:64px;padding-top:40px;border-top:1px solid var(--v-border-default)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="display:inline-flex;width:19px;height:23px;color:var(--v-text-primary)"><vb-v style="width:19px;height:23px"></vb-v></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,239,.42)">Vibers · 氛围派</span>
+      <span style="width:1px;height:14px;background:rgba(245,243,239,.14)"></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.06em;color:rgba(245,243,239,.42)">03 · UI Kit v1</span>
+    </div>
+    <h2 style="font:500 clamp(30px,3.6vw,44px)/1.1 Sora,'Noto Sans SC',sans-serif;letter-spacing:-.03em;margin:24px 0 0;max-width:900px">UI Kit<br><span style="color:rgba(245,243,239,.3)">Icon · Motion · Tag · Components · 深浅两套主题等价</span></h2>
+    <p style="max-width:760px;margin:18px 0 0;font-size:15px;line-height:26px;color:rgba(245,243,239,.62)">把品牌规范和 UI 规则做成可直接复用的组件：一套统一重绘的图标、一套 Agent 动效、一套活动标签，以及带完整状态的核心组件。上面两部分页面用的组件都来自这里。</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0">
+      <a href="pages/ui-kit.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(237,106,44,.4);font:500 12px/1 Sora,sans-serif;color:rgba(237,106,44,.92)">打开 UI Kit · 组件与设计系统 →</a>
+    </div>
+  </div>
+
+  <div style="margin-top:64px;padding-top:40px;border-top:1px solid var(--v-border-default)">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="display:inline-flex;width:19px;height:23px;color:var(--v-text-primary)"><vb-v style="width:19px;height:23px"></vb-v></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,239,.42)">Vibers · 氛围派</span>
+      <span style="width:1px;height:14px;background:rgba(245,243,239,.14)"></span>
+      <span style="font:500 12px/16px Sora,sans-serif;letter-spacing:.06em;color:rgba(245,243,239,.42)">04 · AI 辅助原型</span>
+    </div>
+    <h2 style="font:500 clamp(30px,3.6vw,44px)/1.1 Sora,'Noto Sans SC',sans-serif;letter-spacing:-.03em;margin:24px 0 0;max-width:900px">AI 辅助原型<br><span style="color:rgba(245,243,239,.3)">主办方网页端 · 六组 27 个介入点，每个一页样机</span></h2>
+    <p style="max-width:760px;margin:18px 0 0;font-size:15px;line-height:26px;color:rgba(245,243,239,.62)">主办方网页端全流程里 AI 能接手的地方：创建前、活动前的优化与审核、通知与消息、活动中、活动后的反馈与数据，以及一个通用的 AI 对话页兜底。每个介入点一页样机，带多个状态，右侧是设计说明和数据依据。小程序端暂不做。规矩：AI 落在字段旁边；只写文案、只提取事实，不猜人数票价、不给人打分、不替人点发送；不确定的地方跳到对话页，答完回填字段。方案全文在仓库根目录 <code style="font:500 12px Sora,sans-serif">AI辅助-活动全流程方案.md</code>。</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 0">
+      <a href="pages/ai-lab.html" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(237,106,44,.4);font:500 12px/1 Sora,sans-serif;color:rgba(237,106,44,.92)">打开 AI 辅助原型 →</a>
+      <span style="width:1px;height:32px;background:rgba(245,243,239,.14);margin:0 2px"></span>
+      <a href="pages/ai-lab.html#A01-1" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">A · 创建前 · 起草条</a>
+      <a href="pages/ai-lab.html#B01-3" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">B · 活动前 · 一键优化检查</a>
+      <a href="pages/ai-lab.html#N01-1" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">N · 通知起草</a>
+      <a href="pages/ai-lab.html#C02-1" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">C · 活动中 · 现场进度</a>
+      <a href="pages/ai-lab.html#X02-1" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">D · 活动后 · 问数据</a>
+      <a href="pages/ai-lab.html#X01-1" style="display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid rgba(245,243,239,.14);font:500 12px/1 Sora,sans-serif;color:rgba(245,243,239,.72)">X · 活动 AI 对话页</a>
+    </div>
+  </div>
+
+  <div style="margin-top:56px;padding-top:24px;border-top:1px solid var(--v-border-default);font-size:12.5px;line-height:21px;color:rgba(245,243,239,.4);max-width:640px">实现自 Claude Design 项目「Vibers Club UI/UX设计方案」。J 页面（嘉宾落地页）后半部分因为源文件超过读取工具上限被截断，用其他页面已有的组件模式补全，详见该页源码注释。</div>
+</div>
+</body>
+</html>

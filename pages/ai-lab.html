@@ -17,7 +17,7 @@
   /* ============ 查看器外壳：左目录 · 中样机 · 右说明 ============ */
   html,body{height:100%}
   body{overflow:hidden}
-  .al-app{display:grid;grid-template-columns:252px minmax(0,1fr) 336px;height:100vh}
+  .al-app{display:grid;grid-template-columns:252px 200px minmax(0,1fr) 336px;height:100vh}
   .al-rail{display:flex;flex-direction:column;border-right:1px solid var(--v-border-subtle);min-height:0}
   .al-rail-head{flex:none;padding:22px 20px 16px;border-bottom:1px solid var(--v-border-subtle)}
   .al-brand{display:flex;align-items:center;gap:10px}
@@ -53,19 +53,23 @@
   .al-stage-body{flex:1;min-height:0;overflow:auto;padding:36px 28px 60px}
   .al-frame{position:relative;margin:0 auto}
   .al-frame--web{width:760px}
-  .al-frame--wide{width:min(900px,100%)}
+  .al-frame--wide{width:900px}
   .al-kbd-hint{position:absolute;right:28px;bottom:14px;font:400 11px/16px Sora,'Noto Sans SC',sans-serif;color:var(--v-text-tertiary);pointer-events:none}
   .al-kbd{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:5px;border:1px solid var(--v-border-subtle);font:500 10px/1 Sora,sans-serif;margin:0 2px}
 
   /* 左右两栏可折叠：样机贴在中间看正式页面效果。把手贴在样机区左右边缘，收起后还留着，点了再展开；[ ] 两个键也能切 */
-  .al-app--rail-off{grid-template-columns:0 minmax(0,1fr) 336px}
-  .al-app--notes-off{grid-template-columns:252px minmax(0,1fr) 0}
-  .al-app--rail-off.al-app--notes-off{grid-template-columns:0 minmax(0,1fr) 0}
-  .al-rail{grid-column:1}.al-stage{grid-column:2}.al-notes{grid-column:3}
+  .al-app--rail-off{grid-template-columns:0 0 minmax(0,1fr) 336px}
+  .al-app--notes-off{grid-template-columns:252px 200px minmax(0,1fr) 0}
+  .al-app--rail-off.al-app--notes-off{grid-template-columns:0 0 minmax(0,1fr) 0}
+  .al-rail{grid-column:1}.al-subrail{grid-column:2}.al-stage{grid-column:3}.al-notes{grid-column:4}
+  .al-subrail{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--v-border-subtle)}
+  .al-subrail .al-dir-t{white-space:normal}
+  .al-subrail .al-dir-item{align-items:flex-start}
+  .al-subrail .al-dir-id{line-height:18px}
   .al-fold{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1px solid var(--v-border-default);background:transparent;color:var(--v-text-tertiary);cursor:pointer}
   .al-fold:hover{color:var(--v-text-primary);border-color:var(--v-border-strong)}
   .al-brand .al-fold{margin-left:auto}
-  .al-app--rail-off .al-rail,.al-app--notes-off .al-notes{display:none}
+  .al-app--rail-off .al-rail,.al-app--rail-off .al-subrail,.al-app--notes-off .al-notes{display:none}
   .al-edge{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:18px;height:56px;border-radius:9px;border:1px solid var(--v-border-default);background:var(--v-bg-primary);color:var(--v-text-tertiary);display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity .2s,color .2s}
   .al-edge:hover{opacity:1;color:var(--v-text-primary)}
   .al-edge--l{left:8px}.al-edge--r{right:8px}
@@ -512,8 +516,52 @@
   .al-ai-answer .jd-people{margin-top:10px}
   .al-orb-mini{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:color-mix(in srgb, var(--v-brand-signal) 10%, transparent);border:1px solid color-mix(in srgb, var(--v-brand-signal) 35%, transparent);color:var(--v-signal-text);flex:none}
 
+
+  /* Shared reading rhythm: group headings with their own content. */
+  .al-panel + .al-panel{margin-top:var(--v-space-8)}
+  .al-panel-content{margin-top:var(--v-space-4)}
+  .al-panel-content > :first-child{margin-top:0!important}
+  .al-panel .ce2-panel-sub{line-height:var(--v-line-body);margin-top:var(--v-space-2)}
+  .al-fact{align-items:flex-start;line-height:var(--v-line-body);padding-block:var(--v-space-3)}
+  .al-fact .k{line-height:var(--v-line-caption)}
+  .al-fact .v{overflow-wrap:anywhere}
+  .al-ask-bubble,.al-user-bubble{line-height:var(--v-line-body);padding:var(--v-space-3) var(--v-space-4)}
+  .al-ask-sub{margin-top:var(--v-space-2);line-height:var(--v-line-caption)}
+  .al-chat-quick{gap:var(--v-space-2);margin-top:var(--v-space-3)}
+  .al-cp-body{gap:var(--v-space-5);padding:var(--v-space-6) var(--v-space-5)}
+  .al-cp-body > *{flex-shrink:0}
+  .al-cp-body > .al-panel + .al-panel{margin-top:0}
+  .al-cp-body > .al-panel{padding:var(--v-space-4);border:1px solid var(--v-border-subtle);border-radius:var(--v-radius-md);background:var(--v-bg-surface)}
+  .al-cp-body .ce2-panel-h3{font-size:var(--v-text-h3);line-height:var(--v-line-h3)}
+  .al-cp-body .al-panel-content{margin-top:var(--v-space-3)}
+  .al-cp-body .al-panel-content .ce2-panel-sub{margin:0 0 var(--v-space-3)}
+  .al-cp-head{flex-wrap:wrap;gap:var(--v-space-2)}
+  .al-cp-about{height:auto;min-height:var(--v-line-h3);line-height:var(--v-line-caption)}
+  .al-cp-from{line-height:var(--v-line-caption)}
+  .al-chat-input{padding:var(--v-space-3);flex-wrap:wrap;line-height:var(--v-line-body);gap:var(--v-space-2)}
+  .al-cp-ctx{gap:var(--v-space-5)}
+  .al-out-h{letter-spacing:normal;line-height:var(--v-line-caption)}
+  .al-out-item{margin-top:var(--v-space-4)}
+  .al-out-k{line-height:var(--v-line-caption)}
+  .al-out-v{margin-top:var(--v-space-1);line-height:var(--v-line-body);overflow-wrap:anywhere}
+  .al-note-v{line-height:var(--v-line-body)}
+  .al-notes-state{line-height:var(--v-line-body)}
+  .al-subrail .al-dir-item{padding-block:var(--v-space-3)}
+  .al-subrail .al-dir-t{line-height:var(--v-line-caption)}
+  .al-dir-id{line-height:var(--v-line-caption)}
+
   [data-v-theme="light"] .al-poster{background:linear-gradient(160deg, color-mix(in srgb, var(--v-brand-signal) 55%, #fff), #EDEAE4)}
   [data-v-theme="light"] .al-cover-opt--c{border-color:rgba(20,20,20,.2)}
+  .al-poster-result{width:250px;margin-top:var(--v-space-4)}
+  .al-poster-result--landscape{width:100%;max-width:760px}
+  .al-poster-card--landscape{aspect-ratio:16/9;display:grid;grid-template-columns:3fr 2fr;gap:var(--v-space-2) var(--v-space-6);padding:var(--v-space-6)}
+  .al-poster-card--landscape .k,.al-poster-card--landscape .t,.al-poster-card--landscape .s{grid-column:1}
+  .al-poster-card--landscape .g{grid-column:2;grid-row:2/4;margin-top:0;align-self:center}
+  .al-poster-card--landscape .m{grid-column:1/-1;margin-top:auto}
+  .al-poster-result .al-poster-card--b{background:radial-gradient(at top right,var(--v-bg-elevated),transparent),var(--v-brand-signal)}
+  .al-poster-card--landscape .t{font-size:var(--v-text-h2);line-height:var(--v-line-h2)}
+  .al-poster-card--landscape .s,.al-poster-card--landscape .g{font-size:var(--v-text-body);line-height:var(--v-line-body)}
+  .al-poster-card--landscape .m,.al-poster-card--landscape .k{font-size:var(--v-text-caption);line-height:var(--v-line-caption)}
 </style>
 </head>
 <body>
@@ -522,9 +570,15 @@
     <div class="al-rail-head">
       <div class="al-brand"><span style="display:inline-flex;width:17px;height:21px;color:var(--v-text-primary)"><vb-v style="width:17px;height:21px"></vb-v></span><span class="al-brand-label">Vibers · 氛围派</span><button type="button" class="al-fold" data-panel="rail" title="收起目录（[）" aria-label="收起目录"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg></button></div>
       <div class="al-rail-title">AI 辅助原型</div>
-      <div class="al-rail-sub">主办方网页端 · 六组，每个介入点一页样机，右上角切状态。不确定的地方都能跳到 06 的 AI 对话</div>
+      <div class="al-rail-sub">主办方网页端 · 先看 AI 对话和创建前；活动、通知与活动后按 P1 / P2 接入。左侧第二列选择子页面</div>
     </div>
+    <div style="padding:var(--v-space-3) var(--v-space-5);border-bottom:1px solid var(--v-border-subtle)"><button type="button" class="al-btn" id="alPrioritySort" aria-pressed="false">按优先级排序</button></div>
     <nav class="al-dir" id="alDir" aria-label="场景目录"></nav>
+  </aside>
+
+  <aside class="al-subrail" aria-label="当前功能的子页面">
+    <div class="al-rail-head"><div class="al-rail-title" id="alSubTitle"></div><div class="al-rail-sub">选择要查看的状态与流程</div></div>
+    <nav class="al-dir" id="alSubDir" aria-label="子页面目录"></nav>
   </aside>
 
   <main class="al-stage">
@@ -619,7 +673,7 @@
     html += '<div class="ce2-main">' + opts.body + '</div>';
     return html;
   }
-  function panel(h3, sub, body) { return '<h3 class="ce2-panel-h3">' + esc(h3) + '</h3>' + (sub ? '<p class="ce2-panel-sub">' + sub + '</p>' : '') + body; }
+  function panel(h3, sub, body) { return '<section class="al-panel"><h3 class="ce2-panel-h3">' + esc(h3) + '</h3>' + (sub ? '<p class="ce2-panel-sub">' + sub + '</p>' : '') + '<div class="al-panel-content">' + body + '</div></section>'; }
 
   window.AILab = {
     scenes: [], register: function (s) { window.AILab.scenes.push(s); },
@@ -627,21 +681,21 @@
   };
 
   // ---------- 查看器 ----------
-  var STAGES = [
-    { key: 'create', n: '01', label: '创建前 · 想办到有草稿' },
-    { key: 'before', n: '02', label: '活动前 · 优化与审核' },
-    { key: 'notify', n: '03', label: '通知与消息 · 各阶段共用' },
-    { key: 'live', n: '04', label: '活动中' },
-    { key: 'after', n: '05', label: '活动后 · 反馈与数据' },
-    { key: 'chat', n: '06', label: 'AI 对话 · 不确定时的兜底' },
-    { key: 'data', n: '07', label: '数据 · 已实现的两个页面（mock）' }
-  ];
+  var STAGES = [{"key": "prio", "n": "00", "label": "优先级 · 按创建衔接排"}, {"key": "chat", "n": "01", "label": "AI 对话 · 先聊到能创建"}, {"key": "create", "n": "02", "label": "创建前 · 主办方到活动草稿"}, {"key": "before", "n": "03", "label": "活动前 · 优化与审核"}, {"key": "notify", "n": "04", "label": "通知与消息 · 各阶段共用"}, {"key": "live", "n": "05", "label": "活动中"}, {"key": "after", "n": "06", "label": "活动后 · 反馈与数据"}, {"key": "data", "n": "07", "label": "数据 · 已实现的页面（mock）"}];
   var cur = { id: null, state: 0 };
+  var prioritySort = false;
+  try { prioritySort = localStorage.getItem('al-priority-sort') === '1'; } catch (e) { /* 本次会话仍可排序 */ }
+  function compareScenes(a, b) {
+    var ranks = { P0: 0, P1: 1, P2: 2 };
+    var rankA = ranks[a.flag] === undefined ? 3 : ranks[a.flag];
+    var rankB = ranks[b.flag] === undefined ? 3 : ranks[b.flag];
+    return (prioritySort ? rankA - rankB : 0) || a.id.localeCompare(b.id);
+  }
 
   function sceneById(id) { return window.AILab.scenes.filter(function (s) { return s.id === id; })[0]; }
   function readHash() {
     var m = (location.hash || '').replace('#', '').split('-');
-    var s = sceneById(m[0]) || window.AILab.scenes[0];
+    var s = sceneById(m[0] === 'D03' ? 'A00' : m[0]) || window.AILab.scenes[0];
     var st = parseInt(m[1], 10); if (!(st >= 1 && st <= s.states.length)) st = 1;
     cur.id = s.id; cur.state = st - 1;
   }
@@ -650,11 +704,16 @@
     if (push !== false) history.replaceState(null, '', '#' + id + '-' + (cur.state + 1));
     render();
   }
+  function orderedScenes() { return STAGES.reduce(function (all, st) { return all.concat(window.AILab.scenes.filter(function (s) { return s.stage === st.key; }).sort(compareScenes)); }, []); }
   function renderDir() {
+    var sortButton = document.getElementById('alPrioritySort');
+    sortButton.setAttribute('aria-pressed', String(prioritySort));
+    sortButton.classList.toggle('al-btn--primary', prioritySort);
+    sortButton.textContent = prioritySort ? '优先级排序 · 已开启' : '按优先级排序';
     var html = '';
     STAGES.forEach(function (st) {
       html += '<div class="al-dir-stage"><span class="al-dir-stage-n">' + st.n + '</span>' + esc(st.label) + '</div>';
-      window.AILab.scenes.filter(function (s) { return s.stage === st.key; }).forEach(function (s) {
+      orderedScenes().filter(function (s) { return s.stage === st.key; }).forEach(function (s) {
         html += '<button type="button" class="al-dir-item' + (s.id === cur.id ? ' al-dir-item--active' : '') + '" data-go="' + s.id + '"><span class="al-dir-id">' + s.id + '</span><span class="al-dir-t">' + esc(s.title) + '</span><span class="al-dir-flag' + (s.flag === 'P0' ? ' al-dir-flag--p0' : '') + '">' + esc(s.flag) + '</span></button>';
       });
     });
@@ -667,25 +726,38 @@
     if (!s) return;
     renderDir();
     var surface = s.surface === 'wide' ? '网页端 · 900' : '网页端 · 760';
-    document.getElementById('alHead').innerHTML = '<div><div class="al-stage-title">' + s.id + ' · ' + esc(s.title) + '</div><div class="al-stage-where">' + esc(s.where) + '</div></div><span class="al-surface">' + esc(surface) + '</span>' +
-      '<div class="al-states">' + s.states.map(function (st, i) { return '<button type="button" class="al-state' + (i === cur.state ? ' al-state--active' : '') + '" data-state="' + i + '"><span class="al-state-n">0' + (i + 1) + '</span>' + esc(st) + '</button>'; }).join('') + '</div>';
+    document.getElementById('alHead').innerHTML = '<div><div class="al-stage-title">' + s.id + ' · ' + esc(s.title) + '</div><div class="al-stage-where">' + esc(s.where) + '</div></div><span class="al-surface">' + esc(surface) + '</span>';
+    document.getElementById('alSubTitle').textContent = s.id + ' · 子页面';
+    document.getElementById('alSubDir').innerHTML = s.states.map(function (st, i) {
+      return '<button type="button" class="al-dir-item' + (i === cur.state ? ' al-dir-item--active' : '') + '" data-state="' + i + '"' + (i === cur.state ? ' aria-current="page"' : '') + '><span class="al-dir-id">' + String(i + 1).padStart(2, '0') + '</span><span class="al-dir-t">' + esc(st) + '</span></button>';
+    }).join('');
+    var selectedState = document.querySelector('#alSubDir [aria-current="page"]');
+    if (selectedState) selectedState.scrollIntoView({block: 'nearest'});
     var body = document.getElementById('alBody');
     body.innerHTML = '<div class="al-frame al-frame--' + (s.surface === 'wide' ? 'wide' : 'web') + '">' + s.render(cur.state, window.AILab.h) + '</div>';
+    var next = { A00: ['A01', '进入活动创建'], A02: ['A07', '查看发布前检查'] }[s.id];
+    if (next) body.querySelector('.al-frame').insertAdjacentHTML('beforeend', '<div class="al-chat-quick"><button type="button" class="al-btn" data-go="' + (s.id === 'A00' ? 'A00' : 'X01') + '" data-go-state="' + (s.id === 'A00' ? '2' : '1') + '">资料不足，进入 AI 对话</button><button type="button" class="al-btn al-btn--primary" data-go="' + next[0] + '">' + next[1] + '</button></div>');
     body.scrollTop = 0;
-    var notes = '<div class="al-notes-state">状态 0' + (cur.state + 1) + ' · <b>' + esc(s.states[cur.state]) + '</b>' + (s.stateNotes && s.stateNotes[cur.state] ? '<br>' + esc(s.stateNotes[cur.state]) : '') + '</div>';
+    var notes = '<div class="al-notes-state">状态 ' + String(cur.state + 1).padStart(2, '0') + ' · <b>' + esc(s.states[cur.state]) + '</b>' + (s.stateNotes && s.stateNotes[cur.state] ? '<br>' + esc(s.stateNotes[cur.state]) : '') + '</div>';
     notes += s.notes.map(function (n) { return '<div class="al-note"><div class="al-note-k">' + esc(n[0]) + '</div><div class="al-note-v">' + n[1] + '</div></div>'; }).join('');
     document.getElementById('alNotes').innerHTML = notes;
     document.getElementById('alNotes').scrollTop = 0;
     document.title = s.id + ' · ' + s.title + ' · AI 辅助原型 · Vibers';
   }
   document.addEventListener('click', function (e) {
-    var d = e.target.closest('[data-go]'); if (d) { go(d.getAttribute('data-go'), 0); return; }
+    if (e.target.closest('#alPrioritySort')) {
+      prioritySort = !prioritySort;
+      try { localStorage.setItem('al-priority-sort', prioritySort ? '1' : '0'); } catch (err) { /* 本次会话仍可排序 */ }
+      renderDir();
+      return;
+    }
+    var d = e.target.closest('[data-go]'); if (d) { go(d.getAttribute('data-go'), parseInt(d.getAttribute('data-go-state'), 10) || 0); return; }
     var st = e.target.closest('[data-state]'); if (st) { go(cur.id, parseInt(st.getAttribute('data-state'), 10)); }
   });
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var s = sceneById(cur.id); if (!s) return;
-    var all = window.AILab.scenes, idx = all.indexOf(s);
+    var all = orderedScenes(), idx = all.indexOf(s);
     if (e.key === 'ArrowRight') { go(cur.id, (cur.state + 1) % s.states.length); e.preventDefault(); }
     else if (e.key === 'ArrowLeft') { go(cur.id, (cur.state - 1 + s.states.length) % s.states.length); e.preventDefault(); }
     else if (e.key === 'ArrowDown') { go(all[(idx + 1) % all.length].id, 0); e.preventDefault(); }
@@ -720,9 +792,9 @@
   window.addEventListener('DOMContentLoaded', function () { applyPanels(); readHash(); render(); });
 })();
 </script>
-<script src="../assets/js/ai-lab/scenes-create.js"></script>
-<script src="../assets/js/ai-lab/scenes-before.js"></script>
-<script src="../assets/js/ai-lab/scenes-live-after.js"></script>
+<script src="../assets/js/ai-lab/scenes-create.js?v=20261006-inspiration1"></script>
+<script src="../assets/js/ai-lab/scenes-before.js?v=20261006-inspiration1"></script>
+<script src="../assets/js/ai-lab/scenes-live-after.js?v=20261006-inspiration1"></script>
 <script src="../assets/js/ai-lab/scenes-data.js"></script>
 </body>
 </html>

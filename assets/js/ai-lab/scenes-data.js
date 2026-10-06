@@ -76,7 +76,7 @@
     '.dx-btn{display:inline-flex;align-items:center;height:32px;padding:0 13px;border-radius:10px;border:1px solid var(--v-border-strong);background:none;color:var(--v-text-primary);font:500 12.5px/1 var(--v-font-mixed);cursor:pointer}' +
     '.dx-method{padding-top:16px;border-top:1px solid var(--v-border-subtle);font:400 13px/20px var(--v-font-mixed);color:var(--v-text-tertiary)}' +
     '.dx-chips{display:flex;flex-wrap:wrap;gap:8px}.dx-chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 11px;border-radius:10px;border:1px solid var(--v-border-default);font:400 13px/20px var(--v-font-mixed);color:var(--v-text-primary)}.dx-chip b{font-weight:400;font-variant-numeric:tabular-nums;color:var(--v-text-tertiary)}' +
-    '.dx-aud{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}.dx-aud-col{display:flex;flex-direction:column;gap:10px;min-width:0}.dx-aud-l{font:400 12px/18px var(--v-font-mixed);color:var(--v-text-tertiary)}.dx-aud .dx-hb li{grid-template-columns:96px minmax(0,1fr) 72px}' +
+    '.dx-aud{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}.dx-aud-col{display:flex;flex-direction:column;gap:10px;min-width:0}.dx-aud-l{display:flex;align-items:baseline;gap:8px;font:400 12px/18px var(--v-font-mixed);color:var(--v-text-primary)}.dx-aud-l i{font-style:normal;font-variant-numeric:tabular-nums;color:var(--v-text-tertiary)}.dx-aud-s{margin-top:2px;font:400 11px/16px var(--v-font-mixed);color:var(--v-text-tertiary)}.dx-aud .dx-hb li{grid-template-columns:96px minmax(0,1fr) 72px}' +
     '.dx-ws{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.dx-ws-t{font:500 22px/30px var(--v-font-mixed);letter-spacing:-.01em;color:var(--v-text-primary)}.dx-ws-s{margin-top:2px;font:400 12px/18px var(--v-font-mixed);color:var(--v-text-tertiary)}';
   var style = document.createElement('style');
   style.textContent = css;
@@ -116,9 +116,9 @@
     ai: [
       ['「场地不错」被选 9%，平台均值 30%。下次换个场地，或者在活动信息里把场地情况写清楚。', '去改'],
       ['报名成功的人里 5 人没来（17%）。开场前一天的自动提醒开着就好；上限 30 可以按到场率多放几个名额。', '去改'],
+      ['填了名片的人里 31% 想找人一起做点事。开场按在做的方向分组坐，留 15 分钟轮流讲自己的项目。', '去改'],
       ['「聊得投机」被选 9%，平台均值 26%。把人数控制在 20 人以内，或者分小组。', '去改'],
-      ['「氛围放松」被选 0%，平台均值 16%。换个安静一点的场地。', '去改'],
-      ['3 人等到结束都没审核。下次开「待审核提醒」，或者这类场次改成免审核。', '去改']
+      ['「氛围放松」被选 0%，平台均值 16%。换个安静一点的场地。', '去改']
     ]
   };
   var A3 = {
@@ -182,13 +182,31 @@
     return block('AI 分析', done ? 'AI 生成，可能有误 · 10 月 1 日' : (withLinks ? '根据这场的设置和数据，给下一场的建议' : '根据这段时间的数据，给接下来的建议'), body, h.aiBtn(done ? '重新生成' : '生成分析'));
   }
   /* 来的人：按名片归类（职业 / 标签 / 城市），只有类别和人数。快照同 mock 的 audience 字段 */
-  var HOST_AUD = { people: 151, titles: [['学生', 22], ['创业者', 21], ['市场', 20], ['投资人', 19], ['运营', 19], ['产品经理', 17], ['设计师', 17], ['工程师', 16]], tags: [['游戏', 22], ['摄影', 21], ['品牌', 20], ['写作', 20], ['创业', 19], ['产品设计', 19], ['设计系统', 18], ['数据', 17], ['社区运营', 16], ['开源', 16], ['硬件', 15], ['AI', 15]], cities: [['上海', 33], ['杭州', 30], ['深圳', 30], ['苏州', 30], ['北京', 28]] };
-  var A19_AUD = { people: 24, titles: [['创业者', 4], ['学生', 4], ['运营', 3], ['投资人', 3], ['市场', 3], ['产品经理', 3], ['工程师', 2], ['设计师', 2]], tags: [['游戏', 7], ['内容创作', 4], ['开源', 4], ['产品设计', 4], ['创业', 4], ['AI', 4], ['社区运营', 4], ['数据', 3], ['教育', 3], ['硬件', 3], ['前端', 2]], cities: [['深圳', 5], ['苏州', 5], ['上海', 5], ['杭州', 5], ['北京', 4]] };
-  var A3_AUD = { people: 58, titles: [['产品经理', 9], ['工程师', 8], ['创业者', 8], ['设计师', 7], ['运营', 7], ['学生', 7], ['投资人', 6], ['市场', 6]], tags: [['创业', 14], ['AI', 12], ['产品设计', 10], ['投资', 9], ['独立开发', 8], ['数据', 7], ['开源', 6], ['硬件', 5], ['社区运营', 5], ['内容创作', 4], ['前端', 3], ['写作', 3]], cities: [['上海', 31], ['杭州', 11], ['深圳', 8], ['北京', 5], ['苏州', 3]] };
+  var HOST_AUD = { people: 151, titles: [['学生', 22], ['创业者', 21], ['市场', 20], ['投资人', 19], ['运营', 19], ['产品经理', 17], ['设计师', 17], ['工程师', 16]], tags: [['游戏', 22], ['摄影', 21], ['品牌', 20], ['写作', 20], ['创业', 19], ['产品设计', 19], ['设计系统', 18], ['数据', 17], ['社区运营', 16], ['开源', 16], ['硬件', 15], ['AI', 15]], cities: [['上海', 33], ['杭州', 30], ['深圳', 30], ['苏州', 30], ['北京', 28]],
+    doing: { people: 111, types: [['App', 36], ['网站', 22], ['内容账号', 12], ['活动', 11], ['小程序', 6], ['工程项目', 6]], stages: [['还没开始', 27], ['做着', 41], ['上线了', 34], ['暂停了', 9]] },
+    background: { people: 149, domains: [['AI 前沿', 44], ['数字产品', 28], ['内容创作', 21], ['商业增长', 16], ['硬科技', 12], ['城市社会', 11]], states: [['独立创业中', 44], ['在职', 37], ['在校学习中', 28], ['自由职业', 16], ['自由探索中', 10], ['放个假，休息中', 4]] },
+    intents: { people: 101, items: [['认识些新朋友', 38], ['找人一起做点事', 31], ['看看大家在做什么', 24], ['看看有意思的活动', 18], ['看看有没有新机会', 15], ['随便逛逛', 12]] } };
+  var A19_AUD = { people: 24, titles: [['创业者', 4], ['学生', 4], ['运营', 3], ['投资人', 3], ['市场', 3], ['产品经理', 3], ['工程师', 2], ['设计师', 2]], tags: [['游戏', 7], ['内容创作', 4], ['开源', 4], ['产品设计', 4], ['创业', 4], ['AI', 4], ['社区运营', 4], ['数据', 3], ['教育', 3], ['硬件', 3], ['前端', 2]], cities: [['深圳', 5], ['苏州', 5], ['上海', 5], ['杭州', 5], ['北京', 4]],
+    doing: { people: 16, types: [['App', 6], ['网站', 4], ['内容账号', 2]], stages: [['还没开始', 4], ['做着', 6], ['上线了', 5], ['暂停了', 1]] },
+    background: { people: 24, domains: [['AI 前沿', 8], ['内容创作', 4], ['商业增长', 3], ['城市社会', 2], ['硬科技', 2], ['学习研究', 2]], states: [['独立创业中', 8], ['在校学习中', 5], ['在职', 5], ['自由职业', 4]] },
+    intents: { people: 13, items: [['认识些新朋友', 8], ['看看有意思的活动', 4], ['找人一起做点事', 4]] } };
+  var A3_AUD = { people: 58, titles: [['产品经理', 9], ['工程师', 8], ['创业者', 8], ['设计师', 7], ['运营', 7], ['学生', 7], ['投资人', 6], ['市场', 6]], tags: [['创业', 14], ['AI', 12], ['产品设计', 10], ['投资', 9], ['独立开发', 8], ['数据', 7], ['开源', 6], ['硬件', 5], ['社区运营', 5], ['内容创作', 4], ['前端', 3], ['写作', 3]], cities: [['上海', 31], ['杭州', 11], ['深圳', 8], ['北京', 5], ['苏州', 3]],
+    doing: { people: 41, types: [['App', 14], ['网站', 8], ['内容账号', 6], ['小程序', 4], ['课程/服务', 3], ['活动', 2]], stages: [['还没开始', 9], ['做着', 18], ['上线了', 12], ['暂停了', 2]] },
+    background: { people: 56, domains: [['AI 前沿', 19], ['数字产品', 12], ['金融投资', 9], ['商业增长', 8], ['内容创作', 5], ['硬科技', 4]], states: [['独立创业中', 21], ['在职', 18], ['在校学习中', 7], ['自由职业', 6], ['自由探索中', 2]] },
+    intents: { people: 38, items: [['找人一起做点事', 15], ['看看有没有新机会', 12], ['认识些新朋友', 11], ['看看大家在做什么', 7], ['看看有意思的活动', 3]] } };
+  function chips(list) { return '<div class="dx-chips">' + list.map(function (t) { return '<span class="dx-chip">' + t[0] + '<b>' + t[1] + ' 人</b></span>'; }).join('') + '</div>'; }
+  function bars(list) { return hbars(list.map(function (t) { return { l: t[0], v: t[1], t: t[1] + ' 人' }; })); }
+  function col(label, filled, body) { return '<div class="dx-aud-col"><span class="dx-aud-l">' + label + (filled ? '<i>' + filled + ' 人填了</i>' : '') + '</span>' + body + '</div>'; }
+  /* 在做 / 经历 / 想遇见什么（10-06 加）：都是名片里的枚举项，只有类别和人数；自由文本（bio、在做说明）不碰 */
   function audience(a, pctCities) {
     var cities = a.cities.map(function (c) { return c[0] + ' ' + (pctCities ? pct(c[1], a.people) + '%' : c[1]); }).join(' / ');
-    var body = '<div class="dx-aud"><div class="dx-aud-col"><span class="dx-aud-l">职业</span>' + hbars(a.titles.map(function (t) { return { l: t[0], v: t[1], t: t[1] + ' 人' }; })) + '</div>' +
-      '<div class="dx-aud-col"><span class="dx-aud-l">标签</span><div class="dx-chips">' + a.tags.map(function (t) { return '<span class="dx-chip">' + t[0] + '<b>' + t[1] + ' 人</b></span>'; }).join('') + '</div></div></div>';
+    var body = '<div class="dx-aud">' +
+      col('职业', 0, bars(a.titles)) +
+      col('标签', 0, chips(a.tags)) +
+      (a.doing ? col('在做', a.doing.people, '<span class="dx-aud-s">类型</span>' + bars(a.doing.types) + '<span class="dx-aud-s">阶段</span>' + stack([[a.doing.stages[0][0], a.doing.stages[0][1], 3], [a.doing.stages[1][0], a.doing.stages[1][1], 1], [a.doing.stages[2][0], a.doing.stages[2][1], 2], [a.doing.stages[3][0], a.doing.stages[3][1], 4]])) : '') +
+      (a.background ? col('经历', a.background.people, '<span class="dx-aud-s">熟悉方向</span>' + bars(a.background.domains) + '<span class="dx-aud-s">最近状态</span>' + chips(a.background.states)) : '') +
+      (a.intents ? col('想遇见什么', a.intents.people, chips(a.intents.items)) : '') +
+      '</div>';
     return { meta: a.people + ' 人有名片信息 · ' + cities, body: body };
   }
   var HOST_AI = [
