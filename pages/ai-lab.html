@@ -71,6 +71,8 @@
   .al-brand .al-fold{margin-left:auto}
   .al-app--rail-off .al-rail,.al-app--rail-off .al-subrail,.al-app--notes-off .al-notes{display:none}
   .al-edge{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:18px;height:56px;border-radius:9px;border:1px solid var(--v-border-default);background:var(--v-bg-primary);color:var(--v-text-tertiary);display:grid;place-items:center;cursor:pointer;opacity:.75;transition:opacity .2s,color .2s}
+  .al-expand-directory{display:none;flex:none}
+  .al-app--rail-off .al-expand-directory{display:inline-flex}
   .al-edge:hover{opacity:1;color:var(--v-text-primary)}
   .al-edge--l{left:8px}.al-edge--r{right:8px}
   .al-edge svg{transition:transform .2s}
@@ -726,7 +728,7 @@
     if (!s) return;
     renderDir();
     var surface = s.surface === 'wide' ? '网页端 · 900' : '网页端 · 760';
-    document.getElementById('alHead').innerHTML = '<div><div class="al-stage-title">' + s.id + ' · ' + esc(s.title) + '</div><div class="al-stage-where">' + esc(s.where) + '</div></div><span class="al-surface">' + esc(surface) + '</span>';
+    document.getElementById('alHead').innerHTML = '<button type="button" class="al-btn al-expand-directory" data-panel="rail" aria-expanded="false" aria-controls="alDir alSubDir" title="展开目录（[）">展开目录</button><div><div class="al-stage-title">' + s.id + ' · ' + esc(s.title) + '</div><div class="al-stage-where">' + esc(s.where) + '</div></div><span class="al-surface">' + esc(surface) + '</span>';
     document.getElementById('alSubTitle').textContent = s.id + ' · 子页面';
     document.getElementById('alSubDir').innerHTML = s.states.map(function (st, i) {
       return '<button type="button" class="al-dir-item' + (i === cur.state ? ' al-dir-item--active' : '') + '" data-state="' + i + '"' + (i === cur.state ? ' aria-current="page"' : '') + '><span class="al-dir-id">' + String(i + 1).padStart(2, '0') + '</span><span class="al-dir-t">' + esc(st) + '</span></button>';
